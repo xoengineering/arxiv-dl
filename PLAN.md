@@ -162,7 +162,7 @@ Each milestone is its own commit; each commit is green (`script/test` passes).
 3. ✅ **Identifier parsing** — `Identifier.new(input).id` and `.version` for every supported input form. Pure, no I/O. Table-driven specs. Final commit `c4989b5`.
 4. ✅ **Slug** — `Slug.new(title).to_s`: `title.to_url` via `stringex`, then word-boundary truncation to 80 chars. Strips TeX math (`$...$`) and commands (`\emph`, `\alpha`) first. Pure. Final commit `fcd28d5`.
 5. ✅ **Categories taxonomy** — `Categories.new.lookup('cs.CV')` returns `{id, name, group}`. Pure (reads embedded yaml). 155 categories across 8 groups extracted from arxiv's category_taxonomy page via `tmp/build_categories.rb`.
-6. **HTTP client** — `Client.new.get(url)` wrapper around http.rb with proper `User-Agent` and rate-limit gate. Verified against a fixture URL.
+6. ✅ **HTTP client** — `Client.new.get(url)` wrapper around http.rb with proper `User-Agent` and rate-limit gate (sleeps between requests). WebMock-backed specs against fixture URLs.
 7. **Atom feed → Metadata** — `FeedParser.new(xml).metadata` returns `Metadata` value object. Tested against real Atom XML fixtures in `spec/fixtures/atom/<id>.xml`.
 8. **Path** — `Path.new(metadata).to_s` → `YYYY/MM/DD/<cat>/<id>-<slug>` from metadata. Pure.
 9. **PDF download** — `PDF.new(identifier, client:).download to: path`. Streaming write to disk.
