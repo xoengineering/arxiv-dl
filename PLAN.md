@@ -165,7 +165,7 @@ Each milestone is its own commit; each commit is green (`script/test` passes).
 6. ✅ **HTTP client** — `Client.new.get(url)` wrapper around http.rb with proper `User-Agent` and rate-limit gate (sleeps between requests). WebMock-backed specs against fixture URLs.
 7. ✅ **Atom feed → Metadata** — `FeedParser.new(xml).metadata` returns `Metadata` value object with title, authors, abstract, dates, arxiv_id/url/pdf_url, primary_category{id,name,group}, categories[], comment, doi, journal_ref. Custom `AtomEntry` subclass captures `arxiv:` namespace. Tested against `spec/fixtures/http/atom-{2508.16190,1207.7214}.xml`.
 8. ✅ **Path** — `Path.new(metadata).to_s` → `YYYY/MM/DD/<cat>/<id>-<slug>` from metadata. Replaces `/` in legacy IDs with `-`. Pure.
-9. **PDF download** — `PDF.new(identifier, client:).download to: path`. Streaming write to disk.
+9. ✅ **PDF download** — `PDF.new(identifier, client:).download to: path`. WebMock-backed spec with 4KB binary fixture.
 10. **BibTeX** — synthesize from `Metadata`; also fetch upstream `https://arxiv.org/bibtex/<id>`. Prefer fetched, fall back to synthesized.
 11. **Abstract page** — `AbstractPage.new(identifier, client:).download to: path`. Single HTML file.
 12. **Source archive** — `SourceArchive.new(identifier, client:).download to: dir`: fetch tarball, extract via stdlib `tar` (or `rubygems/package`), drop tarball.
