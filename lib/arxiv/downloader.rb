@@ -7,6 +7,7 @@ require_relative 'downloader/client'
 require_relative 'downloader/metadata'
 require_relative 'downloader/feed_parser'
 require_relative 'downloader/path'
+require_relative 'downloader/pdf'
 
 module Arxiv
   module Downloader
