@@ -494,6 +494,114 @@ RSpec.describe Arxiv::Downloader::Identifier do
           end
         end
       end
+
+      # surrounding whitespace tolerance (delete_spaces!)
+      context 'with surrounding whitespace' do
+        context 'with leading space' do
+          let(:input) { ' 2508.16190' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with trailing space' do
+          let(:input) { '2508.16190 ' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with leading and trailing space' do
+          let(:input) { ' 2508.16190 ' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with trailing newline' do
+          let(:input) { "2508.16190\n" }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with surrounding tabs' do
+          let(:input) { "\t2508.16190\t" }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with multiple surrounding spaces' do
+          let(:input) { '  2508.16190  ' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+      end
+
+      # trailing slash tolerance (strip_slashes!)
+      context 'with trailing slash on URL' do
+        context 'with single trailing slash' do
+          let(:input) { 'https://arxiv.org/abs/2508.16190/' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with multiple trailing slashes' do
+          let(:input) { 'https://arxiv.org/abs/2508.16190//' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+      end
+
+      # mixed-case arxiv: prefix tolerance (delete_arxiv_namespace! /i)
+      context 'with mixed-case arxiv: prefix' do
+        context 'with uppercase ARXIV:' do
+          let(:input) { 'ARXIV:2508.16190' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with camel case arXiv:' do
+          let(:input) { 'arXiv:2508.16190' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with capitalized Arxiv:' do
+          let(:input) { 'Arxiv:2508.16190' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+      end
     end
 
     context 'when input invalid' do
