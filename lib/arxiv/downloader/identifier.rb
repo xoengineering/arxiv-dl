@@ -39,7 +39,6 @@ module Arxiv
       end
 
       def invalidate_no_dot_no_slash_input
-        invalid = false
         invalid = true if !@draft.include?('.') && !@draft.include?('/')
 
         raise Invalid, "not a recognizable arXiv identifier: #{input}" if invalid

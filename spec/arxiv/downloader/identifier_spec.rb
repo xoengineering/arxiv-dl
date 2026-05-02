@@ -54,52 +54,56 @@ RSpec.describe Arxiv::Downloader::Identifier do
   # invalid_inputs
   # 'arxiv.org/foo'
 
-  context 'with nil input' do
-    let(:input) { nil }
+  describe '.new' do
+    context 'with invalid input' do
+      context 'with nil input' do
+        let(:input) { nil }
 
-    it 'raises Invalid error' do
-      expect { described_class.new input }.to raise_error described_class::Invalid, 'blank input is invalid'
+        it 'raises Invalid error' do
+          expect { described_class.new input }.to raise_error described_class::Invalid, 'blank input is invalid'
+        end
+      end
+
+      context 'with blank string input' do
+        let(:input) { '' }
+
+        it 'raises Invalid error' do
+          expect { described_class.new input }.to raise_error described_class::Invalid, 'blank input is invalid'
+        end
+      end
+
+      context 'with non-arXiv URL input' do
+        let(:input) { 'https://example.com/abs/2508.16190' }
+
+        it 'raises Invalid error' do
+          expect { described_class.new input }
+            .to raise_error described_class::Invalid, 'domains other than arxiv.org are invalid'
+        end
+      end
+
+      context 'with no dot or slash in string input' do
+        let(:input) { 'garbage' }
+
+        it 'raises Invalid error' do
+          expect { described_class.new input }
+            .to raise_error described_class::Invalid, "not a recognizable arXiv identifier: #{input}"
+        end
+      end
+
+      context 'with no dot or slash in number input' do
+        let(:input) { '12345' }
+
+        it 'raises Invalid error' do
+          expect { described_class.new input }
+            .to raise_error described_class::Invalid, "not a recognizable arXiv identifier: #{input}"
+        end
+      end
     end
   end
-
-  context 'with blank string input' do
-    let(:input) { '' }
-
-    it 'raises Invalid error' do
-      expect { described_class.new input }.to raise_error described_class::Invalid, 'blank input is invalid'
-    end
-  end
-
-  context 'with non-arXiv URL input' do
-    let(:input) { 'https://example.com/abs/2508.16190' }
-
-    it 'raises Invalid error' do
-      expect { described_class.new input }
-        .to raise_error described_class::Invalid, 'domains other than arxiv.org are invalid'
-    end
-  end
-
-  context 'with no dot or slash in string input' do
-    let(:input) { 'garbage' }
-
-    it 'raises Invalid error' do
-      expect { described_class.new input }
-        .to raise_error described_class::Invalid, "not a recognizable arXiv identifier: #{input}"
-    end
-  end
-
-  context 'with no dot or slash in number input' do
-    let(:input) { '12345' }
-
-    it 'raises Invalid error' do
-      expect { described_class.new input }
-        .to raise_error described_class::Invalid, "not a recognizable arXiv identifier: #{input}"
-    end
-  end
-
-  # invalid_inputs.each do |input|
-  #   it "raises Invalid for #{input.inspect}" do
-  #     expect { described_class.new input }.to raise_error described_class::Invalid, /#{Regexp.escape(input)}/
-  #   end
-  # end
 end
+
+# invalid_inputs.each do |input|
+#   it "raises Invalid for #{input.inspect}" do
+#     expect { described_class.new input }.to raise_error described_class::Invalid, /#{Regexp.escape(input)}/
+#   end
+# end
