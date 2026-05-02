@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/ItPpWnvjUs3dib0C3hmr6Nvyh5E</id>
+  <title>arXiv Query: search_query=&amp;id_list=2508.16190&amp;start=0&amp;max_results=10</title>
+  <updated>2026-05-02T13:12:48Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=2508.16190" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2508.16190v1</id>
+    <title>ComicScene154: A Scene Dataset for Comic Analysis</title>
+    <updated>2025-08-22T08:11:58Z</updated>
+    <link href="https://arxiv.org/abs/2508.16190v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2508.16190v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Comics offer a compelling yet under-explored domain for computational narrative analysis, combining text and imagery in ways distinct from purely textual or audiovisual media. We introduce ComicScene154, a manually annotated dataset of scene-level narrative arcs derived from public-domain comic books spanning diverse genres. By conceptualizing comics as an abstraction for narrative-driven, multimodal data, we highlight their potential to inform broader research on multi-modal storytelling. To demonstrate the utility of ComicScene154, we present a baseline scene segmentation pipeline, providing an initial benchmark that future studies can build upon. Our results indicate that ComicScene154 constitutes a valuable resource for advancing computational methods in multimodal narrative understanding and expanding the scope of comic analysis within the Natural Language Processing community.</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-08-22T08:11:58Z</published>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Sandro Paval</name>
+    </author>
+    <author>
+      <name>Ivan P. Yamshchikov</name>
+    </author>
+    <author>
+      <name>Pascal Meißner</name>
+    </author>
+  </entry>
+</feed>

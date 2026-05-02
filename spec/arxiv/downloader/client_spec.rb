@@ -26,4 +26,22 @@ RSpec.describe Arxiv::Downloader::Client do
       end
     end
   end
+
+  describe '#get' do
+    let(:client) { described_class.new(rate_limit: 0) }
+    let(:url)    { 'https://export.arxiv.org/api/query?id_list=2508.16190' }
+    let(:body)   { File.read 'spec/fixtures/http/atom-2508.16190.xml' }
+
+    before { stub_request(:get, url).to_return(status: 200, body: body) }
+
+    it 'returns the response body' do
+      expect(client.get(url).to_s).to eq body
+    end
+
+    it 'sends the gem User-Agent header' do
+      client.get url
+
+      expect(WebMock).to have_requested(:get, url).with(headers: { 'User-Agent' => client.user_agent })
+    end
+  end
 end

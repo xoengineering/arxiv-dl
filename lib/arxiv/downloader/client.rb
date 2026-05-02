@@ -1,3 +1,5 @@
+require 'http'
+
 module Arxiv
   module Downloader
     class Client
@@ -12,6 +14,10 @@ module Arxiv
 
       def user_agent
         "arxiv-dl/#{VERSION} (+#{SOURCE_URL})"
+      end
+
+      def get url
+        HTTP.headers('User-Agent' => user_agent).follow.get(url)
       end
     end
   end
