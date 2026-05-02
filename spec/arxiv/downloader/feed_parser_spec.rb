@@ -15,5 +15,13 @@ RSpec.describe Arxiv::Downloader::FeedParser do
       expect(metadata.abstract).to start_with('Comics offer a compelling yet under-explored domain')
       expect(metadata.abstract).to include('ComicScene154')
     end
+
+    it 'extracts the published date' do
+      expect(metadata.published).to eq Date.new(2025, 8, 22)
+    end
+
+    it 'extracts the updated date' do
+      expect(metadata.updated).to eq Date.new(2025, 8, 22)
+    end
   end
 end
