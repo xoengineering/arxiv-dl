@@ -20,7 +20,24 @@ module Arxiv
         BIBTEX
       end
 
+      def fetch
+        return nil if @client.nil?
+
+        response = @client.get url
+        return nil unless response.status.success?
+
+        response.to_s
+      end
+
+      def to_s
+        fetch || synthesize
+      end
+
       private
+
+      def url
+        "https://arxiv.org/bibtex/#{@metadata.arxiv_id}"
+      end
 
       def key
         last_name  = @metadata.authors.first.split.last.downcase.gsub(/[^a-z]/, '')
