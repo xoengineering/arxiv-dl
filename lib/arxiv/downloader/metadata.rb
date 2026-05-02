@@ -8,7 +8,9 @@ module Arxiv
       :authors,
       :abstract,
       :published,
-      :updated
+      :updated,
+      :primary_category,
+      :categories
     )
   end
 end

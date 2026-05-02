@@ -11,6 +11,8 @@ module Arxiv
 
       class AtomEntry < Feedjira::Parser::AtomEntry
         elements :author, as: :authors, class: Author
+
+        element 'arxiv:primary_category', as: :primary_category_id, value: :term
       end
 
       class AtomFeed
@@ -27,7 +29,8 @@ module Arxiv
       Feedjira.configure { |config| config.parsers = [AtomFeed] + config.parsers }
 
       def initialize xml
-        @feed = Feedjira.parse xml
+        @feed       = Feedjira.parse xml
+        @categories = Categories.new
       end
 
       def metadata
@@ -35,14 +38,16 @@ module Arxiv
         arxiv_id = Identifier.new(entry.entry_id).id
 
         Metadata.new(
-          arxiv_id:  arxiv_id,
-          arxiv_url: "https://arxiv.org/abs/#{arxiv_id}",
-          pdf_url:   "https://arxiv.org/pdf/#{arxiv_id}.pdf",
-          title:     entry.title,
-          authors:   entry.authors.map(&:name),
-          abstract:  entry.summary.strip,
-          published: entry.published.to_date,
-          updated:   entry.updated.to_date
+          arxiv_id:         arxiv_id,
+          arxiv_url:        "https://arxiv.org/abs/#{arxiv_id}",
+          pdf_url:          "https://arxiv.org/pdf/#{arxiv_id}.pdf",
+          title:            entry.title,
+          authors:          entry.authors.map(&:name),
+          abstract:         entry.summary.strip,
+          published:        entry.published.to_date,
+          updated:          entry.updated.to_date,
+          primary_category: @categories.lookup(entry.primary_category_id),
+          categories:       entry.categories.map { |id| @categories.lookup id }
         )
       end
     end

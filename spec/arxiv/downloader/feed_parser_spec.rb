@@ -35,5 +35,19 @@ RSpec.describe Arxiv::Downloader::FeedParser do
     it 'derives the canonical PDF URL' do
       expect(metadata.pdf_url).to eq 'https://arxiv.org/pdf/2508.16190.pdf'
     end
+
+    it 'extracts the primary category as id, name, group' do
+      expect(metadata.primary_category).to eq(
+        id:    'cs.CL',
+        name:  'Computation and Language',
+        group: 'Computer Science'
+      )
+    end
+
+    it 'extracts all categories as id, name, group' do
+      expect(metadata.categories).to eq [
+        { id: 'cs.CL', name: 'Computation and Language', group: 'Computer Science' }
+      ]
+    end
   end
 end
