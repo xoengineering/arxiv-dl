@@ -43,5 +43,42 @@ RSpec.describe Arxiv::Downloader::Client do
 
       expect(WebMock).to have_requested(:get, url).with(headers: { 'User-Agent' => client.user_agent })
     end
+
+    context 'with rate-limiting enabled' do
+      let(:client) { described_class.new(rate_limit: 3) }
+
+      it 'does not sleep on the first request' do
+        allow(client).to receive(:sleep)
+
+        client.get url
+
+        expect(client).not_to have_received(:sleep)
+      end
+
+      it 'sleeps before the second request to maintain the interval' do
+        allow(client).to receive(:sleep)
+
+        client.get url
+        client.get url
+
+        expect(client).to have_received(:sleep) do |seconds|
+          expect(seconds).to be > 0
+          expect(seconds).to be <= 3
+        end
+      end
+    end
+
+    context 'with rate-limiting disabled (rate_limit: 0)' do
+      let(:client) { described_class.new(rate_limit: 0) }
+
+      it 'never sleeps' do
+        allow(client).to receive(:sleep)
+
+        client.get url
+        client.get url
+
+        expect(client).not_to have_received(:sleep)
+      end
+    end
   end
 end

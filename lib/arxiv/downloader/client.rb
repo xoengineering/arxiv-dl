@@ -17,7 +17,22 @@ module Arxiv
       end
 
       def get url
-        HTTP.headers('User-Agent' => user_agent).follow.get(url)
+        throttle
+        response = HTTP.headers('User-Agent' => user_agent).follow.get(url)
+        @last_request_at = Time.now
+        response
+      end
+
+      private
+
+      def throttle
+        return if @rate_limit.zero?
+        return if @last_request_at.nil?
+
+        elapsed = Time.now - @last_request_at
+        return if elapsed >= @rate_limit
+
+        sleep(@rate_limit - elapsed)
       end
     end
   end
