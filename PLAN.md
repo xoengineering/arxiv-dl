@@ -160,7 +160,7 @@ Each milestone is its own commit; each commit is green (`script/test` passes).
 1. ✅ Skeleton + script/ + rubocop config — committed `9f64351`.
 2. ✅ Rewrite scripts to Ruby pattern — committed `30b1837`.
 3. ✅ **Identifier parsing** — `Identifier.new(input).id` and `.version` for every supported input form. Pure, no I/O. Table-driven specs. Final commit `c4989b5`.
-4. **Slug** — `Slug.new(title).to_s`: `title.to_url` via `stringex`, then word-boundary truncation to 80 chars. Pure.
+4. ✅ **Slug** — `Slug.new(title).to_s`: `title.to_url` via `stringex`, then word-boundary truncation to 80 chars. Strips TeX math (`$...$`) and commands (`\emph`, `\alpha`) first. Pure. Final commit `fcd28d5`.
 5. **Categories taxonomy** — `Categories.new.lookup('cs.CV')` returns `{id, name, group}`. Pure (reads embedded yaml).
 6. **HTTP client** — `Client.new.get(url)` wrapper around http.rb with proper `User-Agent` and rate-limit gate. Verified against a fixture URL.
 7. **Atom feed → Metadata** — `FeedParser.new(xml).metadata` returns `Metadata` value object. Tested against real Atom XML fixtures in `spec/fixtures/atom/<id>.xml`.
