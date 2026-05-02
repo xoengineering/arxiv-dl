@@ -1,0 +1,5 @@
+module Arxiv
+  module Downloader
+    VERSION: String
+  end
+end

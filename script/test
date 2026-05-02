@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# script/test — run tests and linter
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+bundle exec rspec
+bundle exec rubocop

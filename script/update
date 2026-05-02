@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# script/update — update dependencies after pulling changes
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+bundle install

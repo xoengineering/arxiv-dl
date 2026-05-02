@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# script/bootstrap — install dependencies
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+bundle install

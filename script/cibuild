@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# script/cibuild — run tests in CI
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+script/test
