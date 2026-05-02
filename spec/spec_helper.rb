@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'arxiv/downloader'
 
 RSpec.configure do |config|
