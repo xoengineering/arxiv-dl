@@ -10,7 +10,10 @@ module Arxiv
       :published,
       :updated,
       :primary_category,
-      :categories
+      :categories,
+      :comment,
+      :doi,
+      :journal_ref
     )
   end
 end

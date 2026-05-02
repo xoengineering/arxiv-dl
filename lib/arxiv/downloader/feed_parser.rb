@@ -13,6 +13,9 @@ module Arxiv
         elements :author, as: :authors, class: Author
 
         element 'arxiv:primary_category', as: :primary_category_id, value: :term
+        element 'arxiv:comment',          as: :comment
+        element 'arxiv:doi',              as: :doi
+        element 'arxiv:journal_ref',      as: :journal_ref
       end
 
       class AtomFeed
@@ -47,7 +50,10 @@ module Arxiv
           published:        entry.published.to_date,
           updated:          entry.updated.to_date,
           primary_category: @categories.lookup(entry.primary_category_id),
-          categories:       entry.categories.map { |id| @categories.lookup id }
+          categories:       entry.categories.map { |id| @categories.lookup id },
+          comment:          entry.comment,
+          doi:              entry.doi,
+          journal_ref:      entry.journal_ref
         )
       end
     end

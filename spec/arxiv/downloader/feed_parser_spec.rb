@@ -49,5 +49,34 @@ RSpec.describe Arxiv::Downloader::FeedParser do
         { id: 'cs.CL', name: 'Computation and Language', group: 'Computer Science' }
       ]
     end
+
+    it 'returns nil for comment when none is present' do
+      expect(metadata.comment).to be_nil
+    end
+
+    it 'returns nil for doi when none is present' do
+      expect(metadata.doi).to be_nil
+    end
+
+    it 'returns nil for journal_ref when none is present' do
+      expect(metadata.journal_ref).to be_nil
+    end
+  end
+
+  describe '#metadata for a paper with comment, doi, and journal_ref' do
+    let(:xml)      { File.read 'spec/fixtures/http/atom-1207.7214.xml' }
+    let(:metadata) { described_class.new(xml).metadata }
+
+    it 'extracts the comment' do
+      expect(metadata.comment).to start_with '24 pages plus author list'
+    end
+
+    it 'extracts the doi' do
+      expect(metadata.doi).to eq '10.1016/j.physletb.2012.08.020'
+    end
+
+    it 'extracts the journal_ref' do
+      expect(metadata.journal_ref).to eq 'Phys.Lett. B716 (2012) 1-29'
+    end
   end
 end
