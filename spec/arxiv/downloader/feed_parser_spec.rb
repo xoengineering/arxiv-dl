@@ -6,5 +6,9 @@ RSpec.describe Arxiv::Downloader::FeedParser do
     it 'extracts the title' do
       expect(metadata.title).to eq 'ComicScene154: A Scene Dataset for Comic Analysis'
     end
+
+    it 'extracts all authors in order' do
+      expect(metadata.authors).to eq ['Sandro Paval', 'Ivan P. Yamshchikov', 'Pascal Meißner']
+    end
   end
 end
