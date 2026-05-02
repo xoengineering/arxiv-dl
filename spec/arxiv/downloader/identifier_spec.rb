@@ -13,16 +13,22 @@ RSpec.describe Arxiv::Downloader::Identifier do
   #   [x] 'arXiv:0706.0001v3'                      => ['0706.0001',        3],
 
   #   # Modern, https URLs
-  #   'https://arxiv.org/abs/2508.16190'       => ['2508.16190',       nil],
-  #   'https://arxiv.org/abs/2508.16190v2'     => ['2508.16190',       2],
-  #   'https://arxiv.org/pdf/2508.16190.pdf'   => ['2508.16190',       nil],
-  #   'https://arxiv.org/pdf/2508.16190v2.pdf' => ['2508.16190',       2],
-  #   'https://arxiv.org/pdf/2508.16190'       => ['2508.16190',       nil], # no .pdf
-  #   'https://arxiv.org/html/2506.15442'      => ['2506.15442',       nil],
-  #   'https://arxiv.org/html/2506.15442v1'    => ['2506.15442',       1],
+  #   [x] 'https://arxiv.org/abs/2508.16190'       => ['2508.16190',       nil],
+  #   [x] 'https://arxiv.org/abs/2508.16190v2'     => ['2508.16190',       2],
+  #   [x] 'https://arxiv.org/pdf/2508.16190.pdf'   => ['2508.16190',       nil],
+  #   [x] 'https://arxiv.org/pdf/2508.16190v2.pdf' => ['2508.16190',       2],
+  #   [x] 'https://arxiv.org/pdf/2508.16190'       => ['2508.16190',       nil], # no .pdf
+  #   [x] 'https://arxiv.org/html/2506.15442'      => ['2506.15442',       nil],
+  #   [x] 'https://arxiv.org/html/2506.15442v1'    => ['2506.15442',       1],
 
   #   # Modern, http URLs (non-https)
-  #   'http://arxiv.org/abs/2508.16190'        => ['2508.16190',       nil],
+  #   [x] 'http://arxiv.org/abs/2508.16190'       => ['2508.16190',       nil],
+  #   [x] 'http://arxiv.org/abs/2508.16190v2'     => ['2508.16190',       2],
+  #   [x] 'http://arxiv.org/pdf/2508.16190.pdf'   => ['2508.16190',       nil],
+  #   [x] 'http://arxiv.org/pdf/2508.16190v2.pdf' => ['2508.16190',       2],
+  #   [x] 'http://arxiv.org/pdf/2508.16190'       => ['2508.16190',       nil], # no .pdf
+  #   [x] 'http://arxiv.org/html/2506.15442'      => ['2506.15442',       nil],
+  #   [x] 'http://arxiv.org/html/2506.15442v1'    => ['2506.15442',       1],
 
   #   # Legacy, bare
   #   'cs/0002001'                             => ['cs/0002001',       nil],
@@ -124,6 +130,162 @@ RSpec.describe Arxiv::Downloader::Identifier do
           it 'parses ID and version' do
             expect(parsed_input.id).to      eq '0706.0001'
             expect(parsed_input.version).to eq 3
+          end
+        end
+      end
+
+      context 'with modern 4digit dot 5digit ID in HTTPS abstract URL' do
+        context 'with no version' do
+          let(:input) { 'https://arxiv.org/abs/2508.16190' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'https://arxiv.org/abs/2508.16190v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+      end
+
+      context 'with modern 4digit dot 5digit ID in HTTPS PDF URL' do
+        context 'with .pdf extension and no version' do
+          let(:input) { 'https://arxiv.org/pdf/2508.16190.pdf' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with .pdf extension and version' do
+          let(:input) { 'https://arxiv.org/pdf/2508.16190v2.pdf' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+
+        context 'with no .pdf extension and no version' do
+          let(:input) { 'https://arxiv.org/pdf/2508.16190' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with no .pdf extension and with version' do
+          let(:input) { 'https://arxiv.org/pdf/2508.16190v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+      end
+
+      context 'with modern 4digit dot 5digit ID in HTTPS HTML URL' do
+        context 'with no version' do
+          let(:input) { 'https://arxiv.org/html/2506.15442' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2506.15442'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'https://arxiv.org/html/2506.15442v1' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2506.15442'
+            expect(parsed_input.version).to eq 1
+          end
+        end
+      end
+
+      context 'with modern 4digit dot 5digit ID in HTTP (no S) abstract URL' do
+        context 'with no version' do
+          let(:input) { 'http://arxiv.org/abs/2508.16190' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'http://arxiv.org/abs/2508.16190v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+      end
+
+      context 'with modern 4digit dot 5digit ID in HTTP (no S) PDF URL' do
+        context 'with .pdf extension and no version' do
+          let(:input) { 'http://arxiv.org/pdf/2508.16190.pdf' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with .pdf extension and version' do
+          let(:input) { 'http://arxiv.org/pdf/2508.16190v2.pdf' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+
+        context 'with no .pdf extension and no version' do
+          let(:input) { 'http://arxiv.org/pdf/2508.16190' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with no .pdf extension and with version' do
+          let(:input) { 'http://arxiv.org/pdf/2508.16190v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+      end
+
+      context 'with modern 4digit dot 5digit ID in HTTP (no S) HTML URL' do
+        context 'with no version' do
+          let(:input) { 'http://arxiv.org/html/2506.15442' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2506.15442'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'http://arxiv.org/html/2506.15442v1' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2506.15442'
+            expect(parsed_input.version).to eq 1
           end
         end
       end
