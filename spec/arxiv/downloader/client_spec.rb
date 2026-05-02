@@ -6,4 +6,24 @@ RSpec.describe Arxiv::Downloader::Client do
       expect(user_agent).to eq "arxiv-dl/#{Arxiv::Downloader::VERSION} (+https://github.com/xoengineering/arxiv-dl)"
     end
   end
+
+  describe '#rate_limit' do
+    context 'with no argument' do
+      it 'defaults to 3 seconds (arxiv etiquette)' do
+        expect(described_class.new.rate_limit).to eq 3
+      end
+    end
+
+    context 'with an explicit interval' do
+      it 'returns the configured interval' do
+        expect(described_class.new(rate_limit: 1).rate_limit).to eq 1
+      end
+    end
+
+    context 'with zero (disabled)' do
+      it 'returns 0' do
+        expect(described_class.new(rate_limit: 0).rate_limit).to eq 0
+      end
+    end
+  end
 end
