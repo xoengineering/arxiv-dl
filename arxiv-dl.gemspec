@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'feedjira', '~> 4.0'
   spec.add_dependency 'http',     '~> 6.0'
   spec.add_dependency 'ostruct',  '~> 0.6'
   spec.add_dependency 'stringex', '~> 2.8'
