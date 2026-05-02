@@ -31,9 +31,9 @@ require 'arxiv/downloader'
 ## Development
 
 ```sh
-script/bootstrap # install dependencies
-script/test      # run specs and linter
-script/console   # interactive prompt
+script/setup   # install dependencies
+script/test    # run specs and linter
+script/console # interactive prompt
 ```
 
 ## License
