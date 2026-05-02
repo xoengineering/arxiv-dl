@@ -1,14 +1,14 @@
 RSpec.describe Arxiv::Downloader::Identifier do
   # cases = {
   #   # Modern, bare
-  #   '2508.16190'                             => ['2508.16190',       nil],
-  #   '2508.16190v2'                           => ['2508.16190',       2],
-  #   '0706.0001'                              => ['0706.0001',        nil], # 4-digit sequence (pre-2015)
-  #   '0706.0001v3'                            => ['0706.0001',        3],
+  #   [x] '2508.16190'                             => ['2508.16190',       nil],
+  #   [x] '2508.16190v2'                           => ['2508.16190',       2],
+  #   [x] '0706.0001'                              => ['0706.0001',        nil], # 4-digit sequence (pre-2015)
+  #   [x] '0706.0001v3'                            => ['0706.0001',        3],
 
   #   # Modern, arXiv: prefix
-  #   'arXiv:2508.16190'                       => ['2508.16190',       nil],
-  #   'arXiv:2508.16190v2'                     => ['2508.16190',       2],
+  #   [x] 'arXiv:2508.16190'                       => ['2508.16190',       nil],
+  #   [x] 'arXiv:2508.16190v2'                     => ['2508.16190',       2],
 
   #   # Modern, https URLs
   #   'https://arxiv.org/abs/2508.16190'       => ['2508.16190',       nil],
@@ -42,16 +42,83 @@ RSpec.describe Arxiv::Downloader::Identifier do
   #   'arXiv:cs/0002001'                       => ['cs/0002001',       nil]
   # }
 
-  # cases.each do |input, (expected_id, expected_version)|
-  #   it "parses #{input.inspect}" do
-  #     identifier = described_class.new input
-
-  #     expect(identifier.id).to      eq expected_id
-  #     expect(identifier.version).to eq expected_version
-  #   end
-  # end
-
   describe '.new' do
+    context 'with valid input' do
+      subject(:parsed_input) { described_class.new input }
+
+      context 'with modern 4digit dot 5digit ID, no version' do
+        let(:input) { '2508.16190' }
+
+        it 'parses ID and version' do
+          expect(parsed_input.id).to      eq '2508.16190'
+          expect(parsed_input.version).to be_nil
+        end
+      end
+
+      context 'with modern 4digit dot 5digit ID, and version' do
+        let(:input) { '2508.16190v2' }
+
+        it 'parses ID and version' do
+          expect(parsed_input.id).to      eq '2508.16190'
+          expect(parsed_input.version).to eq 2
+        end
+      end
+
+      context 'with pre-2015 4digit dot 4digit ID, no version' do
+        let(:input) { '0706.0001' }
+
+        it 'parses ID and version' do
+          expect(parsed_input.id).to      eq '0706.0001'
+          expect(parsed_input.version).to be_nil
+        end
+      end
+
+      context 'with pre-2015 4digit dot 4digit ID, and version' do
+        let(:input) { '0706.0001v3' }
+
+        it 'parses ID and version' do
+          expect(parsed_input.id).to      eq '0706.0001'
+          expect(parsed_input.version).to eq 3
+        end
+      end
+
+      context 'with namespaced modern 4digit dot 5digit ID, no version' do
+        let(:input) { 'arxiv:2508.16190' }
+
+        it 'parses ID and version' do
+          expect(parsed_input.id).to      eq '2508.16190'
+          expect(parsed_input.version).to be_nil
+        end
+      end
+
+      context 'with namespaced modern 4digit dot 5digit ID, and version' do
+        let(:input) { 'arxiv:2508.16190v2' }
+
+        it 'parses ID and version' do
+          expect(parsed_input.id).to      eq '2508.16190'
+          expect(parsed_input.version).to eq 2
+        end
+      end
+
+      context 'with namespaced pre-2015 4digit dot 4digit ID, no version' do
+        let(:input) { 'arxiv:0706.0001' }
+
+        it 'parses ID and version' do
+          expect(parsed_input.id).to      eq '0706.0001'
+          expect(parsed_input.version).to be_nil
+        end
+      end
+
+      context 'with namespaced pre-2015 4digit dot 4digit ID, and version' do
+        let(:input) { 'arxiv:0706.0001v3' }
+
+        it 'parses ID and version' do
+          expect(parsed_input.id).to      eq '0706.0001'
+          expect(parsed_input.version).to eq 3
+        end
+      end
+    end
+
     context 'with invalid input' do
       context 'with nil input' do
         let(:input) { nil }

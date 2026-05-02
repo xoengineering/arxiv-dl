@@ -7,7 +7,7 @@ module Arxiv
 
       def initialize input
         @input = input
-        @draft = input.dup
+        @cleaned_input = input.dup
 
         validate_input
         set_id_and_version
@@ -36,31 +36,31 @@ module Arxiv
       end
 
       def invalidate_wrong_domain_input
-        invalid = true if @draft.include?('http') && !@draft.include?('arxiv.org')
+        invalid = true if @cleaned_input.include?('http') && !@cleaned_input.include?('arxiv.org')
 
         raise Invalid, 'domains other than arxiv.org are invalid' if invalid
       end
 
       def invalidate_no_dot_no_slash_input
-        invalid = true if !@draft.include?('.') && !@draft.include?('/')
+        invalid = true if !@cleaned_input.include?('.') && !@cleaned_input.include?('/')
 
         raise Invalid, "not a recognizable arXiv identifier: #{input}" if invalid
       end
 
       def invalidate_pathless_arxiv_url_input
-        invalid = true if @draft.split('arxiv.org/').last.nil?
+        invalid = true if @cleaned_input.split('arxiv.org/').last.nil?
 
         raise Invalid, "not a recognizable arXiv identifier URL: #{input}" if invalid
       end
 
       def invalidate_apex_arxiv_url_input
-        invalid = true if @draft.split('arxiv.org').last.nil?
+        invalid = true if @cleaned_input.split('arxiv.org').last.nil?
 
         raise Invalid, "not a recognizable arXiv identifier URL: #{input}" if invalid
       end
 
       def invalidate_incomplete_arxiv_url_input
-        path = @draft.split('arxiv.org/').last
+        path = @cleaned_input.split('arxiv.org/').last
         invalid = true if !path.include?('.') && !path.include?('/')
 
         raise Invalid, "not a recognizable arXiv identifier URL: #{input}" if invalid
@@ -70,7 +70,7 @@ module Arxiv
 
       def set_id_and_version
         normalize_input
-        @id = @draft
+        @id = @cleaned_input
       end
 
       # mutaters
@@ -87,48 +87,48 @@ module Arxiv
       end
 
       def delete_spaces!
-        @draft.chomp!
-        @draft.strip!
-        @draft.squeeze! ' '
+        @cleaned_input.chomp!
+        @cleaned_input.strip!
+        @cleaned_input.squeeze! ' '
       end
 
       def strip_slashes!
         loop do
-          @draft.delete_suffix! '/'
-          break unless @draft.end_with? '/'
+          @cleaned_input.delete_suffix! '/'
+          break unless @cleaned_input.end_with? '/'
         end
       end
 
       def delete_protocols!
-        @draft.delete_prefix! 'http://'
-        @draft.delete_prefix! 'https://'
+        @cleaned_input.delete_prefix! 'http://'
+        @cleaned_input.delete_prefix! 'https://'
       end
 
       def delete_domain!
-        @draft.sub! 'arxiv.org', ''
+        @cleaned_input.sub! 'arxiv.org', ''
       end
 
       def delete_format_namespaces!
         %w[/abs/ /html/ /pdf/].each do |format_namespace|
-          @draft.sub! format_namespace, ''
+          @cleaned_input.sub! format_namespace, ''
         end
       end
 
       def delete_arxiv_namespace!
-        @draft.sub!(/(arxiv:)/i, '')
+        @cleaned_input.sub!(/(arxiv:)/i, '')
       end
 
       def delete_file_extensions!
-        @draft.delete_suffix! '.pdf'
+        @cleaned_input.delete_suffix! '.pdf'
       end
 
       def extract_version!
-        dot_parts   = @draft.split('.')
+        dot_parts   = @cleaned_input.split('.')
         slash_parts = dot_parts.last.split('/')
         v_parts     = slash_parts.last.split('v')
 
         @version    = Integer(v_parts.last) if v_parts.length > 1
-        @draft.delete_suffix! "v#{@version}" unless @version.nil?
+        @cleaned_input.delete_suffix! "v#{@version}" unless @version.nil?
       end
 
       # URL_PREFIXES = %w[
