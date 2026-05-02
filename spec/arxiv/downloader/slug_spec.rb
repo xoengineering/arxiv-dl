@@ -12,4 +12,14 @@ RSpec.describe Arxiv::Downloader::Slug do
     expect(slug).not_to    end_with '-'
     expect(slug).to        eq 'deep-residual-learning-for-image-recognition-with-convolutional-neural-networks'
   end
+
+  it 'strips TeX inline math from titles' do
+    expect(described_class.new('On the $\alpha$-Convergence of Deep Networks').to_s)
+      .to eq 'on-the-convergence-of-deep-networks'
+  end
+
+  it 'strips TeX commands outside math from titles' do
+    expect(described_class.new('A Note on \emph{Quantum} Entanglement').to_s)
+      .to eq 'a-note-on-quantum-entanglement'
+  end
 end
