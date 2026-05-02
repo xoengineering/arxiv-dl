@@ -68,4 +68,25 @@ RSpec.describe Arxiv::Downloader::Identifier do
     expect(identifier.id).to      eq '2506.15442'
     expect(identifier.version).to eq 1
   end
+
+  it 'parses a legacy arxiv ID' do
+    identifier = described_class.new 'cs/0002001'
+
+    expect(identifier.id).to      eq 'cs/0002001'
+    expect(identifier.version).to be_nil
+  end
+
+  it 'parses a versioned legacy arxiv ID' do
+    identifier = described_class.new 'cs/0002001v3'
+
+    expect(identifier.id).to      eq 'cs/0002001'
+    expect(identifier.version).to eq 3
+  end
+
+  it 'parses a hyphenated legacy archive ID' do
+    identifier = described_class.new 'alg-geom/9708001'
+
+    expect(identifier.id).to      eq 'alg-geom/9708001'
+    expect(identifier.version).to be_nil
+  end
 end

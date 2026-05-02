@@ -2,6 +2,7 @@ module Arxiv
   module Downloader
     class Identifier
       MODERN_ID  = /\A(\d{4}\.\d{4,5})(?:v(\d+))?\z/
+      LEGACY_ID  = %r{\A([a-z][a-z-]+/\d{7})(?:v(\d+))?\z}
       PREFIX     = /\AarXiv:/i
       URL_PREFIX = %r{\Ahttps?://arxiv\.org/(?:abs|pdf|html)/}
       PDF_SUFFIX = /\.pdf\z/
@@ -9,7 +10,8 @@ module Arxiv
       attr_reader :id, :version
 
       def initialize input
-        match = MODERN_ID.match normalize(input)
+        normalized = normalize input
+        match      = MODERN_ID.match(normalized) || LEGACY_ID.match(normalized)
 
         @id      = match[1]
         @version = match[2]&.to_i
