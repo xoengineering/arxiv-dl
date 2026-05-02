@@ -31,15 +31,16 @@ RSpec.describe Arxiv::Downloader::Identifier do
   #   [x] 'http://arxiv.org/html/2506.15442v1'    => ['2506.15442',       1],
 
   #   # Legacy, bare
-  #   'cs/0002001'                             => ['cs/0002001',       nil],
-  #   'cs/0002001v3'                           => ['cs/0002001',       3],
-  #   'alg-geom/9708001'                       => ['alg-geom/9708001', nil],
-  #   'alg-geom/9708001v7'                     => ['alg-geom/9708001', 7],
+  #   [x] 'cs/0002001'                             => ['cs/0002001',       nil],
+  #   [x] 'cs/0002001v3'                           => ['cs/0002001',       3],
+  #   [x] 'alg-geom/9708001'                       => ['alg-geom/9708001', nil],
+  #   [x] 'alg-geom/9708001v7'                     => ['alg-geom/9708001', 7],
 
   #   # Legacy with subject class (2 uppercase letters)
-  #   'math.GT/0312088'                        => ['math.GT/0312088',  nil],
-  #   'math.GT/0312088v2'                      => ['math.GT/0312088',  2],
-  #   'cs.SE/0501001'                          => ['cs.SE/0501001',    nil],
+  #   [x] 'math.GT/0312088'                        => ['math.GT/0312088',  nil],
+  #   [x] 'math.GT/0312088v2'                      => ['math.GT/0312088',  2],
+  #   [x] 'cs.SE/0501001'                          => ['cs.SE/0501001',    nil],
+  #   [x] 'cs.SE/0501001v8'                        => ['cs.SE/0501001',    8],
 
   #   # Legacy in URL
   #   'https://arxiv.org/abs/cs/0002001'       => ['cs/0002001',       nil],
@@ -301,8 +302,8 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
-      # with category and classic ID path
-      context 'with category and classic ID' do
+      # with category and legacy ID path
+      context 'with category and legacy ID' do
         context 'with no version' do
           let(:input) { 'cs/0002001' }
 
@@ -322,8 +323,8 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
-      # with hyphenated category and classic ID path
-      context 'with hyphenated category and classic ID' do
+      # with hyphenated category and legacy ID path
+      context 'with hyphenated category and legacy ID' do
         context 'with no version' do
           let(:input) { 'alg-geom/9708001' }
 
@@ -339,6 +340,48 @@ RSpec.describe Arxiv::Downloader::Identifier do
           it 'parses ID and version' do
             expect(parsed_input.id).to      eq 'alg-geom/9708001'
             expect(parsed_input.version).to eq 7
+          end
+        end
+      end
+
+      # with category and subject and legacy ID path (2 uppercase letters)
+      context 'with category name and legacy ID' do
+        context 'with no version' do
+          let(:input) { 'math.GT/0312088' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'math.GT/0312088'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'math.GT/0312088v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'math.GT/0312088'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+      end
+
+      # with category and subject and legacy ID path (2 uppercase letters)
+      context 'with category abbreviation and legacy ID' do
+        context 'with no version' do
+          let(:input) { 'cs.SE/0501001' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs.SE/0501001'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'cs.SE/0501001v8' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs.SE/0501001'
+            expect(parsed_input.version).to eq 8
           end
         end
       end
