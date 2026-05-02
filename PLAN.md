@@ -166,7 +166,7 @@ Each milestone is its own commit; each commit is green (`script/test` passes).
 7. ✅ **Atom feed → Metadata** — `FeedParser.new(xml).metadata` returns `Metadata` value object with title, authors, abstract, dates, arxiv_id/url/pdf_url, primary_category{id,name,group}, categories[], comment, doi, journal_ref. Custom `AtomEntry` subclass captures `arxiv:` namespace. Tested against `spec/fixtures/http/atom-{2508.16190,1207.7214}.xml`.
 8. ✅ **Path** — `Path.new(metadata).to_s` → `YYYY/MM/DD/<cat>/<id>-<slug>` from metadata. Replaces `/` in legacy IDs with `-`. Pure.
 9. ✅ **PDF download** — `PDF.new(identifier, client:).download to: path`. WebMock-backed spec with 4KB binary fixture.
-10. **BibTeX** — synthesize from `Metadata`; also fetch upstream `https://arxiv.org/bibtex/<id>`. Prefer fetched, fall back to synthesized.
+10. ✅ **BibTeX** — `Bibtex.new(metadata, client:)`. `#synthesize` builds @misc entry from Metadata; `#fetch` hits `https://arxiv.org/bibtex/<id>`; `#to_s` prefers fetched, falls back to synthesized; works without a client too.
 11. **Abstract page** — `AbstractPage.new(identifier, client:).download to: path`. Single HTML file.
 12. **Source archive** — `SourceArchive.new(identifier, client:).download to: dir`: fetch tarball, extract via stdlib `tar` (or `rubygems/package`), drop tarball.
 13. **Assets cache** — `AssetsCache.new(root:).fetch(url)` returns local path under `_shared/<host>/<path>`; downloads only if missing.
