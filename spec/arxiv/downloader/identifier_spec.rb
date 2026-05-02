@@ -1,13 +1,13 @@
 RSpec.describe Arxiv::Downloader::Identifier do
   cases = {
-    '1512.03385'                             => ['1512.03385',       nil],
-    '1512.03385v2'                           => ['1512.03385',       2],
-    'arXiv:1512.03385'                       => ['1512.03385',       nil],
-    'arXiv:1512.03385v2'                     => ['1512.03385',       2],
-    'https://arxiv.org/abs/1512.03385'       => ['1512.03385',       nil],
-    'https://arxiv.org/abs/1512.03385v2'     => ['1512.03385',       2],
-    'https://arxiv.org/pdf/1512.03385.pdf'   => ['1512.03385',       nil],
-    'https://arxiv.org/pdf/1512.03385v2.pdf' => ['1512.03385',       2],
+    '2508.16190'                             => ['2508.16190',       nil],
+    '2508.16190v2'                           => ['2508.16190',       2],
+    'arXiv:2508.16190'                       => ['2508.16190',       nil],
+    'arXiv:2508.16190v2'                     => ['2508.16190',       2],
+    'https://arxiv.org/abs/2508.16190'       => ['2508.16190',       nil],
+    'https://arxiv.org/abs/2508.16190v2'     => ['2508.16190',       2],
+    'https://arxiv.org/pdf/2508.16190.pdf'   => ['2508.16190',       nil],
+    'https://arxiv.org/pdf/2508.16190v2.pdf' => ['2508.16190',       2],
     'https://arxiv.org/html/2506.15442'      => ['2506.15442',       nil],
     'https://arxiv.org/html/2506.15442v1'    => ['2506.15442',       1],
     'cs/0002001'                             => ['cs/0002001',       nil],
@@ -29,7 +29,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
     'garbage',
     '12345',
     'arxiv.org/foo',
-    'https://example.com/abs/1512.03385'
+    'https://example.com/abs/2508.16190'
   ]
 
   invalid_inputs.each do |input|
