@@ -1,92 +1,26 @@
 RSpec.describe Arxiv::Downloader::Identifier do
-  it 'parses a bare modern arxiv ID' do
-    identifier = described_class.new '1512.03385'
+  cases = {
+    '1512.03385'                             => ['1512.03385',       nil],
+    '1512.03385v2'                           => ['1512.03385',       2],
+    'arXiv:1512.03385'                       => ['1512.03385',       nil],
+    'arXiv:1512.03385v2'                     => ['1512.03385',       2],
+    'https://arxiv.org/abs/1512.03385'       => ['1512.03385',       nil],
+    'https://arxiv.org/abs/1512.03385v2'     => ['1512.03385',       2],
+    'https://arxiv.org/pdf/1512.03385.pdf'   => ['1512.03385',       nil],
+    'https://arxiv.org/pdf/1512.03385v2.pdf' => ['1512.03385',       2],
+    'https://arxiv.org/html/2506.15442'      => ['2506.15442',       nil],
+    'https://arxiv.org/html/2506.15442v1'    => ['2506.15442',       1],
+    'cs/0002001'                             => ['cs/0002001',       nil],
+    'cs/0002001v3'                           => ['cs/0002001',       3],
+    'alg-geom/9708001'                       => ['alg-geom/9708001', nil]
+  }
 
-    expect(identifier.id).to      eq '1512.03385'
-    expect(identifier.version).to be_nil
-  end
+  cases.each do |input, (expected_id, expected_version)|
+    it "parses #{input.inspect}" do
+      identifier = described_class.new input
 
-  it 'parses a versioned bare modern arxiv ID' do
-    identifier = described_class.new '1512.03385v2'
-
-    expect(identifier.id).to      eq '1512.03385'
-    expect(identifier.version).to eq 2
-  end
-
-  it 'parses a prefixed arxiv ID' do
-    identifier = described_class.new 'arXiv:1512.03385'
-
-    expect(identifier.id).to      eq '1512.03385'
-    expect(identifier.version).to be_nil
-  end
-
-  it 'parses a prefixed and versioned arxiv ID' do
-    identifier = described_class.new 'arXiv:1512.03385v2'
-
-    expect(identifier.id).to      eq '1512.03385'
-    expect(identifier.version).to eq 2
-  end
-
-  it 'parses an abstract page URL' do
-    identifier = described_class.new 'https://arxiv.org/abs/1512.03385'
-
-    expect(identifier.id).to      eq '1512.03385'
-    expect(identifier.version).to be_nil
-  end
-
-  it 'parses a versioned abstract page URL' do
-    identifier = described_class.new 'https://arxiv.org/abs/1512.03385v2'
-
-    expect(identifier.id).to      eq '1512.03385'
-    expect(identifier.version).to eq 2
-  end
-
-  it 'parses a PDF URL' do
-    identifier = described_class.new 'https://arxiv.org/pdf/1512.03385.pdf'
-
-    expect(identifier.id).to      eq '1512.03385'
-    expect(identifier.version).to be_nil
-  end
-
-  it 'parses a versioned PDF URL' do
-    identifier = described_class.new 'https://arxiv.org/pdf/1512.03385v2.pdf'
-
-    expect(identifier.id).to      eq '1512.03385'
-    expect(identifier.version).to eq 2
-  end
-
-  it 'parses an HTML version URL' do
-    identifier = described_class.new 'https://arxiv.org/html/2506.15442'
-
-    expect(identifier.id).to      eq '2506.15442'
-    expect(identifier.version).to be_nil
-  end
-
-  it 'parses a versioned HTML version URL' do
-    identifier = described_class.new 'https://arxiv.org/html/2506.15442v1'
-
-    expect(identifier.id).to      eq '2506.15442'
-    expect(identifier.version).to eq 1
-  end
-
-  it 'parses a legacy arxiv ID' do
-    identifier = described_class.new 'cs/0002001'
-
-    expect(identifier.id).to      eq 'cs/0002001'
-    expect(identifier.version).to be_nil
-  end
-
-  it 'parses a versioned legacy arxiv ID' do
-    identifier = described_class.new 'cs/0002001v3'
-
-    expect(identifier.id).to      eq 'cs/0002001'
-    expect(identifier.version).to eq 3
-  end
-
-  it 'parses a hyphenated legacy archive ID' do
-    identifier = described_class.new 'alg-geom/9708001'
-
-    expect(identifier.id).to      eq 'alg-geom/9708001'
-    expect(identifier.version).to be_nil
+      expect(identifier.id).to      eq expected_id
+      expect(identifier.version).to eq expected_version
+    end
   end
 end
