@@ -9,6 +9,8 @@ RSpec.describe Arxiv::Downloader::Identifier do
   #   # Modern, arXiv: prefix
   #   [x] 'arXiv:2508.16190'                       => ['2508.16190',       nil],
   #   [x] 'arXiv:2508.16190v2'                     => ['2508.16190',       2],
+  #   [x] 'arXiv:0706.0001'                        => ['0706.0001',        nil], # 4-digit sequence (pre-2015)
+  #   [x] 'arXiv:0706.0001v3'                      => ['0706.0001',        3],
 
   #   # Modern, https URLs
   #   'https://arxiv.org/abs/2508.16190'       => ['2508.16190',       nil],
