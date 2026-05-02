@@ -10,5 +10,10 @@ RSpec.describe Arxiv::Downloader::FeedParser do
     it 'extracts all authors in order' do
       expect(metadata.authors).to eq ['Sandro Paval', 'Ivan P. Yamshchikov', 'Pascal Meißner']
     end
+
+    it 'extracts the abstract' do
+      expect(metadata.abstract).to start_with('Comics offer a compelling yet under-explored domain')
+      expect(metadata.abstract).to include('ComicScene154')
+    end
   end
 end

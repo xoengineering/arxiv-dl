@@ -32,7 +32,11 @@ module Arxiv
 
       def metadata
         entry = @feed.entries.first
-        Metadata.new(title: entry.title, authors: entry.authors.map(&:name))
+        Metadata.new(
+          title:    entry.title,
+          authors:  entry.authors.map(&:name),
+          abstract: entry.summary.strip
+        )
       end
     end
   end
