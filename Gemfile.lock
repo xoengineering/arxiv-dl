@@ -21,6 +21,8 @@ GEM
     json (2.19.4)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
+    nokogiri (1.19.3-arm64-darwin)
+      racc (~> 1.4)
     ostruct (0.6.3)
     parallel (2.1.0)
     parser (3.3.11.1)
@@ -90,11 +92,11 @@ GEM
 
 PLATFORMS
   arm64-darwin-25
-  ruby
 
 DEPENDENCIES
   arxiv-dl!
   irb
+  nokogiri
   rake (~> 13.4)
   rspec (~> 3.13)
   rubocop
@@ -113,6 +115,7 @@ CHECKSUMS
   json (2.19.4) sha256=670a7d333fb3b18ca5b29cb255eb7bef099e40d88c02c80bd42a3f30fe5239ac
   language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
+  nokogiri (1.19.3-arm64-darwin) sha256=71b9bd424b1b7abc18b05052a1a3cfd3627abdca62be280854cc411791357e42
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
   parallel (2.1.0) sha256=b35258865c2e31134c5ecb708beaaf6772adf9d5efae28e93e99260877b09356
   parser (3.3.11.1) sha256=d17ace7aabe3e72c3cc94043714be27cc6f852f104d81aa284c2281aecc65d54

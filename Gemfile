@@ -4,8 +4,9 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'irb'
-gem 'rake',  '~> 13.4'
-gem 'rspec', '~> 3.13'
+gem 'nokogiri'
+gem 'rake',     '~> 13.4'
+gem 'rspec',    '~> 3.13'
 gem 'rubocop'
 gem 'rubocop-performance'
 gem 'rubocop-rake'
