@@ -43,83 +43,91 @@ RSpec.describe Arxiv::Downloader::Identifier do
   # }
 
   describe '.new' do
-    context 'with valid input' do
+    context 'when valid input' do
       subject(:parsed_input) { described_class.new input }
 
-      context 'with modern 4digit dot 5digit ID, no version' do
-        let(:input) { '2508.16190' }
+      context 'with modern 4digit dot 5digit ID' do
+        context 'with no version' do
+          let(:input) { '2508.16190' }
 
-        it 'parses ID and version' do
-          expect(parsed_input.id).to      eq '2508.16190'
-          expect(parsed_input.version).to be_nil
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { '2508.16190v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to eq 2
+          end
         end
       end
 
-      context 'with modern 4digit dot 5digit ID, and version' do
-        let(:input) { '2508.16190v2' }
+      context 'with pre-2015 4digit dot 4digit ID' do
+        context 'with no version' do
+          let(:input) { '0706.0001' }
 
-        it 'parses ID and version' do
-          expect(parsed_input.id).to      eq '2508.16190'
-          expect(parsed_input.version).to eq 2
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '0706.0001'
+            expect(parsed_input.version).to be_nil
+          end
         end
-      end
 
-      context 'with pre-2015 4digit dot 4digit ID, no version' do
-        let(:input) { '0706.0001' }
+        context 'with version' do
+          let(:input) { '0706.0001v3' }
 
-        it 'parses ID and version' do
-          expect(parsed_input.id).to      eq '0706.0001'
-          expect(parsed_input.version).to be_nil
-        end
-      end
-
-      context 'with pre-2015 4digit dot 4digit ID, and version' do
-        let(:input) { '0706.0001v3' }
-
-        it 'parses ID and version' do
-          expect(parsed_input.id).to      eq '0706.0001'
-          expect(parsed_input.version).to eq 3
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '0706.0001'
+            expect(parsed_input.version).to eq 3
+          end
         end
       end
 
       context 'with namespaced modern 4digit dot 5digit ID, no version' do
-        let(:input) { 'arxiv:2508.16190' }
+        context 'with no version' do
+          let(:input) { 'arxiv:2508.16190' }
 
-        it 'parses ID and version' do
-          expect(parsed_input.id).to      eq '2508.16190'
-          expect(parsed_input.version).to be_nil
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'arxiv:2508.16190v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '2508.16190'
+            expect(parsed_input.version).to eq 2
+          end
         end
       end
 
-      context 'with namespaced modern 4digit dot 5digit ID, and version' do
-        let(:input) { 'arxiv:2508.16190v2' }
+      context 'with namespaced pre-2015 4digit dot 4digit ID' do
+        context 'with no version' do
+          let(:input) { 'arxiv:0706.0001' }
 
-        it 'parses ID and version' do
-          expect(parsed_input.id).to      eq '2508.16190'
-          expect(parsed_input.version).to eq 2
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '0706.0001'
+            expect(parsed_input.version).to be_nil
+          end
         end
-      end
 
-      context 'with namespaced pre-2015 4digit dot 4digit ID, no version' do
-        let(:input) { 'arxiv:0706.0001' }
+        context 'with version' do
+          let(:input) { 'arxiv:0706.0001v3' }
 
-        it 'parses ID and version' do
-          expect(parsed_input.id).to      eq '0706.0001'
-          expect(parsed_input.version).to be_nil
-        end
-      end
-
-      context 'with namespaced pre-2015 4digit dot 4digit ID, and version' do
-        let(:input) { 'arxiv:0706.0001v3' }
-
-        it 'parses ID and version' do
-          expect(parsed_input.id).to      eq '0706.0001'
-          expect(parsed_input.version).to eq 3
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq '0706.0001'
+            expect(parsed_input.version).to eq 3
+          end
         end
       end
     end
 
-    context 'with invalid input' do
+    context 'when invalid input' do
       context 'with nil input' do
         let(:input) { nil }
 
