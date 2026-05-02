@@ -1,57 +1,4 @@
 RSpec.describe Arxiv::Downloader::Identifier do
-  # cases = {
-  #   # Modern, bare
-  #   [x] '2508.16190'                             => ['2508.16190',       nil],
-  #   [x] '2508.16190v2'                           => ['2508.16190',       2],
-  #   [x] '0706.0001'                              => ['0706.0001',        nil], # 4-digit sequence (pre-2015)
-  #   [x] '0706.0001v3'                            => ['0706.0001',        3],
-
-  #   # Modern, arXiv: prefix
-  #   [x] 'arXiv:2508.16190'                       => ['2508.16190',       nil],
-  #   [x] 'arXiv:2508.16190v2'                     => ['2508.16190',       2],
-  #   [x] 'arXiv:0706.0001'                        => ['0706.0001',        nil], # 4-digit sequence (pre-2015)
-  #   [x] 'arXiv:0706.0001v3'                      => ['0706.0001',        3],
-
-  #   # Modern, https URLs
-  #   [x] 'https://arxiv.org/abs/2508.16190'       => ['2508.16190',       nil],
-  #   [x] 'https://arxiv.org/abs/2508.16190v2'     => ['2508.16190',       2],
-  #   [x] 'https://arxiv.org/pdf/2508.16190.pdf'   => ['2508.16190',       nil],
-  #   [x] 'https://arxiv.org/pdf/2508.16190v2.pdf' => ['2508.16190',       2],
-  #   [x] 'https://arxiv.org/pdf/2508.16190'       => ['2508.16190',       nil], # no .pdf
-  #   [x] 'https://arxiv.org/html/2506.15442'      => ['2506.15442',       nil],
-  #   [x] 'https://arxiv.org/html/2506.15442v1'    => ['2506.15442',       1],
-
-  #   # Modern, http URLs (non-https)
-  #   [x] 'http://arxiv.org/abs/2508.16190'       => ['2508.16190',       nil],
-  #   [x] 'http://arxiv.org/abs/2508.16190v2'     => ['2508.16190',       2],
-  #   [x] 'http://arxiv.org/pdf/2508.16190.pdf'   => ['2508.16190',       nil],
-  #   [x] 'http://arxiv.org/pdf/2508.16190v2.pdf' => ['2508.16190',       2],
-  #   [x] 'http://arxiv.org/pdf/2508.16190'       => ['2508.16190',       nil], # no .pdf
-  #   [x] 'http://arxiv.org/html/2506.15442'      => ['2506.15442',       nil],
-  #   [x] 'http://arxiv.org/html/2506.15442v1'    => ['2506.15442',       1],
-
-  #   # Legacy, bare
-  #   [x] 'cs/0002001'                             => ['cs/0002001',       nil],
-  #   [x] 'cs/0002001v3'                           => ['cs/0002001',       3],
-  #   [x] 'alg-geom/9708001'                       => ['alg-geom/9708001', nil],
-  #   [x] 'alg-geom/9708001v7'                     => ['alg-geom/9708001', 7],
-
-  #   # Legacy with subject class (2 uppercase letters)
-  #   [x] 'math.GT/0312088'                        => ['math.GT/0312088',  nil],
-  #   [x] 'math.GT/0312088v2'                      => ['math.GT/0312088',  2],
-  #   [x] 'cs.SE/0501001'                          => ['cs.SE/0501001',    nil],
-  #   [x] 'cs.SE/0501001v8'                        => ['cs.SE/0501001',    8],
-
-  #   # Legacy in URL
-  #   'https://arxiv.org/abs/cs/0002001'       => ['cs/0002001',       nil],
-  #   'https://arxiv.org/abs/cs/0002001v3'     => ['cs/0002001',       3],
-  #   'https://arxiv.org/pdf/cs/0002001.pdf'   => ['cs/0002001',       nil],
-  #   'https://arxiv.org/abs/math.GT/0312088'  => ['math.GT/0312088',  nil],
-
-  #   # Legacy with arXiv: prefix
-  #   'arXiv:cs/0002001'                       => ['cs/0002001',       nil]
-  # }
-
   describe '.new' do
     context 'when input valid' do
       subject(:parsed_input) { described_class.new input }
@@ -382,6 +329,168 @@ RSpec.describe Arxiv::Downloader::Identifier do
           it 'parses ID and version' do
             expect(parsed_input.id).to      eq 'cs.SE/0501001'
             expect(parsed_input.version).to eq 8
+          end
+        end
+      end
+
+      # legacy ID in abstract URL
+      context 'with category name and legacy ID in abstract URL' do
+        context 'with no version' do
+          let(:input) { 'https://arxiv.org/abs/cs/0002001' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'https://arxiv.org/abs/cs/0002001v3' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to eq 3
+          end
+        end
+      end
+
+      # legacy ID in PDF URL
+      context 'with category name and legacy ID in PDF URL' do
+        context 'with .pdf extension and no version' do
+          let(:input) { 'http://arxiv.org/pdf/cs/0002001.pdf' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with .pdf extension and version' do
+          let(:input) { 'http://arxiv.org/pdf/cs/0002001v3.pdf' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to eq 3
+          end
+        end
+
+        context 'with no .pdf extension and no version' do
+          let(:input) { 'http://arxiv.org/pdf/cs/0002001' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with no .pdf extension and with version' do
+          let(:input) { 'http://arxiv.org/pdf/cs/0002001v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+      end
+
+      # with category and subject abbreviation (2 uppercase letters) and legacy ID path
+      context 'with category name and subject abbreviation and legacy ID in abstract URL' do
+        context 'with no version' do
+          let(:input) { 'https://arxiv.org/abs/math.GT/0312088' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'math.GT/0312088'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'https://arxiv.org/abs/math.GT/0312088v4' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'math.GT/0312088'
+            expect(parsed_input.version).to eq 4
+          end
+        end
+      end
+
+      # with category and subject abbreviation (2 uppercase letters) and legacy ID path
+      context 'with category name and subject abbreviation and legacy ID in PDF URL' do
+        context 'with .pdf extension and no version' do
+          let(:input) { 'http://arxiv.org/pdf/pdf/math.GT/0312088.pdf' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'pdf/math.GT/0312088'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with .pdf extension and version' do
+          let(:input) { 'http://arxiv.org/pdf/pdf/math.GT/0312088v3.pdf' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'pdf/math.GT/0312088'
+            expect(parsed_input.version).to eq 3
+          end
+        end
+
+        context 'with no .pdf extension and no version' do
+          let(:input) { 'http://arxiv.org/pdf/pdf/math.GT/0312088' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'pdf/math.GT/0312088'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with no .pdf extension and with version' do
+          let(:input) { 'http://arxiv.org/pdf/pdf/math.GT/0312088v9' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'pdf/math.GT/0312088'
+            expect(parsed_input.version).to eq 9
+          end
+        end
+      end
+
+      # modern ID in arxiv: namespace
+      context 'with namespaced with category and legacy ID path' do
+        context 'with no version' do
+          let(:input) { 'arxiv:cs/0002001' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'arxiv:cs/0002001v2' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to eq 2
+          end
+        end
+      end
+
+      # pre-2015 ID in arxiv: namespace
+      context 'with hyphenated namespaced with category and legacy ID path' do
+        context 'with no version' do
+          let(:input) { 'arxiv:alg-geom/9708001' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'alg-geom/9708001'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'arxiv:alg-geom/9708001v3' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'alg-geom/9708001'
+            expect(parsed_input.version).to eq 3
           end
         end
       end
