@@ -23,4 +23,18 @@ RSpec.describe Arxiv::Downloader::Identifier do
       expect(identifier.version).to eq expected_version
     end
   end
+
+  invalid_inputs = [
+    '',
+    'garbage',
+    '12345',
+    'arxiv.org/foo',
+    'https://example.com/abs/1512.03385'
+  ]
+
+  invalid_inputs.each do |input|
+    it "raises Invalid for #{input.inspect}" do
+      expect { described_class.new input }.to raise_error described_class::Invalid, /#{Regexp.escape(input)}/
+    end
+  end
 end
