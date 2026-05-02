@@ -167,7 +167,7 @@ Each milestone is its own commit; each commit is green (`script/test` passes).
 8. ✅ **Path** — `Path.new(metadata).to_s` → `YYYY/MM/DD/<cat>/<id>-<slug>` from metadata. Replaces `/` in legacy IDs with `-`. Pure.
 9. ✅ **PDF download** — `PDF.new(identifier, client:).download to: path`. WebMock-backed spec with 4KB binary fixture.
 10. ✅ **BibTeX** — `Bibtex.new(metadata, client:)`. `#synthesize` builds @misc entry from Metadata; `#fetch` hits `https://arxiv.org/bibtex/<id>`; `#to_s` prefers fetched, falls back to synthesized; works without a client too.
-11. **Abstract page** — `AbstractPage.new(identifier, client:).download to: path`. Single HTML file.
+11. ✅ **Abstract page** — `AbstractPage.new(identifier, client:).download to: path`. Single HTML file.
 12. **Source archive** — `SourceArchive.new(identifier, client:).download to: dir`: fetch tarball, extract via stdlib `tar` (or `rubygems/package`), drop tarball.
 13. **Assets cache** — `AssetsCache.new(root:).fetch(url)` returns local path under `_shared/<host>/<path>`; downloads only if missing.
 14. **HTML archive** — `HTMLArchive.new(identifier, client:, assets_cache:).download to: dir`: fetch HTML, parse asset URLs, fetch relative-path images (sibling), route same-host + CDN to assets cache, rewrite HTML paths.
