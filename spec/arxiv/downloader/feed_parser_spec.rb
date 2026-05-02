@@ -23,5 +23,17 @@ RSpec.describe Arxiv::Downloader::FeedParser do
     it 'extracts the updated date' do
       expect(metadata.updated).to eq Date.new(2025, 8, 22)
     end
+
+    it 'extracts the arxiv ID (without version)' do
+      expect(metadata.arxiv_id).to eq '2508.16190'
+    end
+
+    it 'derives the canonical abstract URL' do
+      expect(metadata.arxiv_url).to eq 'https://arxiv.org/abs/2508.16190'
+    end
+
+    it 'derives the canonical PDF URL' do
+      expect(metadata.pdf_url).to eq 'https://arxiv.org/pdf/2508.16190.pdf'
+    end
   end
 end

@@ -31,8 +31,13 @@ module Arxiv
       end
 
       def metadata
-        entry = @feed.entries.first
+        entry    = @feed.entries.first
+        arxiv_id = Identifier.new(entry.entry_id).id
+
         Metadata.new(
+          arxiv_id:  arxiv_id,
+          arxiv_url: "https://arxiv.org/abs/#{arxiv_id}",
+          pdf_url:   "https://arxiv.org/pdf/#{arxiv_id}.pdf",
           title:     entry.title,
           authors:   entry.authors.map(&:name),
           abstract:  entry.summary.strip,
