@@ -5,9 +5,12 @@ RSpec.describe Arxiv::Downloader::Slug do
   end
 
   it 'truncates a long title to 80 chars at a word boundary' do
-    title = 'A Comprehensive Analysis of Computational Narrative Methods for ' \
-            'Sequential Visual Storytelling and Comic Book Scene Segmentation in Multimodal Datasets'
-    slug  = described_class.new(title).to_s
+    title = <<~TITLE.tr("\n", ' ').strip
+      A Comprehensive Analysis of Computational Narrative Methods for
+      Sequential Visual Storytelling and Comic Book Scene Segmentation
+      in Multimodal Datasets
+    TITLE
+    slug = described_class.new(title).to_s
 
     expect(slug.length).to be <= 80
     expect(slug).not_to    end_with '-'
