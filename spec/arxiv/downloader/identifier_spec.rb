@@ -51,9 +51,6 @@ RSpec.describe Arxiv::Downloader::Identifier do
   #   end
   # end
 
-  # invalid_inputs
-  # 'arxiv.org/foo'
-
   describe '.new' do
     context 'with invalid input' do
       context 'with nil input' do
@@ -98,12 +95,33 @@ RSpec.describe Arxiv::Downloader::Identifier do
             .to raise_error described_class::Invalid, "not a recognizable arXiv identifier: #{input}"
         end
       end
+
+      context 'with pathless arXiv URL input' do
+        let(:input) { 'arxiv.org' }
+
+        it 'raises Invalid error' do
+          expect { described_class.new input }
+            .to raise_error described_class::Invalid, "not a recognizable arXiv identifier URL: #{input}"
+        end
+      end
+
+      context 'with pathless arXiv URL with trailing slash input' do
+        let(:input) { 'arxiv.org/' }
+
+        it 'raises Invalid error' do
+          expect { described_class.new input }
+            .to raise_error described_class::Invalid, "not a recognizable arXiv identifier URL: #{input}"
+        end
+      end
+
+      context 'with incomplete arXiv URL input' do
+        let(:input) { 'arxiv.org/foo' }
+
+        it 'raises Invalid error' do
+          expect { described_class.new input }
+            .to raise_error described_class::Invalid, "not a recognizable arXiv identifier URL: #{input}"
+        end
+      end
     end
   end
 end
-
-# invalid_inputs.each do |input|
-#   it "raises Invalid for #{input.inspect}" do
-#     expect { described_class.new input }.to raise_error described_class::Invalid, /#{Regexp.escape(input)}/
-#   end
-# end

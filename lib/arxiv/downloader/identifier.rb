@@ -22,6 +22,9 @@ module Arxiv
         invalidate_blank_input
         invalidate_wrong_domain_input
         invalidate_no_dot_no_slash_input
+        invalidate_pathless_arxiv_url_input
+        invalidate_apex_arxiv_url_input
+        invalidate_incomplete_arxiv_url_input
       end
 
       def invalidate_nil_input
@@ -42,6 +45,25 @@ module Arxiv
         invalid = true if !@draft.include?('.') && !@draft.include?('/')
 
         raise Invalid, "not a recognizable arXiv identifier: #{input}" if invalid
+      end
+
+      def invalidate_pathless_arxiv_url_input
+        invalid = true if @draft.split('arxiv.org/').last.nil?
+
+        raise Invalid, "not a recognizable arXiv identifier URL: #{input}" if invalid
+      end
+
+      def invalidate_apex_arxiv_url_input
+        invalid = true if @draft.split('arxiv.org').last.nil?
+
+        raise Invalid, "not a recognizable arXiv identifier URL: #{input}" if invalid
+      end
+
+      def invalidate_incomplete_arxiv_url_input
+        path = @draft.split('arxiv.org/').last
+        invalid = true if !path.include?('.') && !path.include?('/')
+
+        raise Invalid, "not a recognizable arXiv identifier URL: #{input}" if invalid
       end
 
       # setter
