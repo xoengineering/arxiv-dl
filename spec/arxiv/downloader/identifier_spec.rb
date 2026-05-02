@@ -34,6 +34,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
   #   'cs/0002001'                             => ['cs/0002001',       nil],
   #   'cs/0002001v3'                           => ['cs/0002001',       3],
   #   'alg-geom/9708001'                       => ['alg-geom/9708001', nil],
+  #   'alg-geom/9708001v7'                     => ['alg-geom/9708001', 7],
 
   #   # Legacy with subject class (2 uppercase letters)
   #   'math.GT/0312088'                        => ['math.GT/0312088',  nil],
@@ -51,9 +52,10 @@ RSpec.describe Arxiv::Downloader::Identifier do
   # }
 
   describe '.new' do
-    context 'when valid input' do
+    context 'when input valid' do
       subject(:parsed_input) { described_class.new input }
 
+      # modern ID
       context 'with modern 4digit dot 5digit ID' do
         context 'with no version' do
           let(:input) { '2508.16190' }
@@ -74,6 +76,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # pre-2015 ID
       context 'with pre-2015 4digit dot 4digit ID' do
         context 'with no version' do
           let(:input) { '0706.0001' }
@@ -94,6 +97,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # modern ID in arxiv: namespace
       context 'with namespaced modern 4digit dot 5digit ID, no version' do
         context 'with no version' do
           let(:input) { 'arxiv:2508.16190' }
@@ -114,6 +118,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # pre-2015 ID in arxiv: namespace
       context 'with namespaced pre-2015 4digit dot 4digit ID' do
         context 'with no version' do
           let(:input) { 'arxiv:0706.0001' }
@@ -134,6 +139,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # modern ID in HTTPS abstract URL
       context 'with modern 4digit dot 5digit ID in HTTPS abstract URL' do
         context 'with no version' do
           let(:input) { 'https://arxiv.org/abs/2508.16190' }
@@ -154,6 +160,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # modern ID in HTTPS PDF URL
       context 'with modern 4digit dot 5digit ID in HTTPS PDF URL' do
         context 'with .pdf extension and no version' do
           let(:input) { 'https://arxiv.org/pdf/2508.16190.pdf' }
@@ -192,6 +199,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # modern ID in HTTPS HTML URL
       context 'with modern 4digit dot 5digit ID in HTTPS HTML URL' do
         context 'with no version' do
           let(:input) { 'https://arxiv.org/html/2506.15442' }
@@ -212,6 +220,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # modern ID in HTTP abstract URL
       context 'with modern 4digit dot 5digit ID in HTTP (no S) abstract URL' do
         context 'with no version' do
           let(:input) { 'http://arxiv.org/abs/2508.16190' }
@@ -232,6 +241,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # modern ID in HTTP PDF URL
       context 'with modern 4digit dot 5digit ID in HTTP (no S) PDF URL' do
         context 'with .pdf extension and no version' do
           let(:input) { 'http://arxiv.org/pdf/2508.16190.pdf' }
@@ -270,6 +280,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
         end
       end
 
+      # modern ID in HTTP HTML URL
       context 'with modern 4digit dot 5digit ID in HTTP (no S) HTML URL' do
         context 'with no version' do
           let(:input) { 'http://arxiv.org/html/2506.15442' }
@@ -289,9 +300,51 @@ RSpec.describe Arxiv::Downloader::Identifier do
           end
         end
       end
+
+      # with category and classic ID path
+      context 'with category and classic ID' do
+        context 'with no version' do
+          let(:input) { 'cs/0002001' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'cs/0002001v3' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'cs/0002001'
+            expect(parsed_input.version).to eq 3
+          end
+        end
+      end
+
+      # with hyphenated category and classic ID path
+      context 'with hyphenated category and classic ID' do
+        context 'with no version' do
+          let(:input) { 'alg-geom/9708001' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'alg-geom/9708001'
+            expect(parsed_input.version).to be_nil
+          end
+        end
+
+        context 'with version' do
+          let(:input) { 'alg-geom/9708001v7' }
+
+          it 'parses ID and version' do
+            expect(parsed_input.id).to      eq 'alg-geom/9708001'
+            expect(parsed_input.version).to eq 7
+          end
+        end
+      end
     end
 
-    context 'when invalid input' do
+    context 'when input invalid' do
       context 'with nil input' do
         let(:input) { nil }
 
