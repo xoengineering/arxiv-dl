@@ -133,6 +133,7 @@ Runtime:
 
 - `http` — HTTP requests.
 - `feedjira` — Atom XML parsing (with a custom `Arxiv::Downloader::AtomEntry` subclass to capture `arxiv:` and `opensearch:` namespace fields).
+- `nokogiri` — HTML parsing for the HTML archive's asset extraction and path rewriting.
 - `stringex` — title slugging (`String#to_url` for Unicode-to-ASCII transliteration).
 
 Dev:
@@ -170,7 +171,7 @@ Each milestone is its own commit; each commit is green (`script/test` passes).
 11. ✅ **Abstract page** — `AbstractPage.new(identifier, client:).download to: path`. Single HTML file.
 12. ✅ **Source archive** — `SourceArchive.new(identifier, client:).download to: dir`: fetch tarball, extract via stdlib `rubygems/package` + `Zlib::GzipReader` in-memory, drop tarball.
 13. ✅ **Assets cache** — `AssetsCache.new(root:, client:).fetch(url)` returns local path under `_shared/<host>/<path>`; downloads only if missing.
-14. **HTML archive** — `HTMLArchive.new(identifier, client:, assets_cache:).download to: dir`: fetch HTML, parse asset URLs, fetch relative-path images (sibling), route same-host + CDN to assets cache, rewrite HTML paths.
+14. ✅ **HTML archive** — `HTMLArchive.new(identifier, client:, assets_cache:).download to: dir`: fetch HTML, parse asset URLs (Nokogiri), fetch relative-path images (sibling), route same-host + CDN to assets cache, rewrite HTML paths.
 15. **Sidecar writers** — `Metadata::Markdown.new(metadata).write`, `Metadata::YAML.new(metadata).write`, `Metadata::JSON.new(metadata).write`, `Metadata::Bibtex.new(metadata).write` produce the four sidecar files.
 16. **Archive orchestrator** — `Archive.new(identifier, root:).run` ties everything together: fetch metadata → compute path → download all artifacts → write sidecars.
 17. **CLI** — `Cli.new(argv).run` wires Archive. Flags: `-p/--path <path>`, `--rate-limit <seconds>`, `-v/--verbose`, `-q/--quiet`, `--version`, `-h/--help`. ENV fallbacks: `ARXIV_DOWNLOAD_PATH`, `ARXIV_RATE_LIMIT`. `-v` and `-q` mutually exclusive.

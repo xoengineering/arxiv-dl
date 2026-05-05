@@ -4,7 +4,6 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'irb'
-gem 'nokogiri'
 gem 'rake',     '~> 13.4'
 gem 'rspec',    '~> 3.13'
 gem 'rubocop'

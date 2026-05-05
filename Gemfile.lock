@@ -4,6 +4,7 @@ PATH
     arxiv-dl (0.1.0)
       feedjira (~> 4.0)
       http (~> 6.0)
+      nokogiri (~> 1.19)
       ostruct (~> 0.6)
       stringex (~> 2.8)
 
@@ -128,7 +129,6 @@ PLATFORMS
 DEPENDENCIES
   arxiv-dl!
   irb
-  nokogiri
   rake (~> 13.4)
   rspec (~> 3.13)
   rubocop

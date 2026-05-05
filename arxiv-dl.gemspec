@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'feedjira', '~> 4.0'
   spec.add_dependency 'http',     '~> 6.0'
+  spec.add_dependency 'nokogiri', '~> 1.19'
   spec.add_dependency 'ostruct',  '~> 0.6'
   spec.add_dependency 'stringex', '~> 2.8'
 end
