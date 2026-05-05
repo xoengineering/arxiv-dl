@@ -10,6 +10,10 @@ RSpec.describe Arxiv::Downloader::Categories do
         expect(result[:name]).to  eq 'Computation and Language'
         expect(result[:group]).to eq 'Computer Science'
       end
+
+      it 'returns the description scraped from arxiv.org/category_taxonomy' do
+        expect(result[:description]).to start_with 'Covers natural language processing'
+      end
     end
 
     context 'with a known modern category (cs.CV)' do

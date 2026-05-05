@@ -14,21 +14,27 @@ namespace :categories do
 
     categories = {}
     group      = nil
-    document.css('h2.accordion-head, h4').each do |node|
+    document.css('h2.accordion-head, .accordion-body div.columns.divided').each do |node|
       if node.name == 'h2'
         group = node.text.strip
         next
       end
 
-      text = node.text.strip.gsub(/\s+/, ' ')
-      next if text == 'Category Name (Category ID)'
+      heading = node.at_css('h4')
+      next if heading.nil?
 
-      match = text.match(/\A(\S+)\s+\((.+)\)\z/)
-      next unless match
+      match = heading.text.strip.gsub(/\s+/, ' ').match(/\A(\S+)\s+\((.+)\)\z/)
+      next if match.nil?
 
       id   = match[1]
       name = match[2]
-      categories[id] = { 'name' => name, 'group' => group }
+
+      entry = { 'name' => name, 'group' => group }
+
+      description = node.at_css('p')&.text&.then { |text| text.strip.gsub(/\s+/, ' ') }
+      entry['description'] = description if description && !description.empty?
+
+      categories[id] = entry
     end
 
     groups_count = categories.values.map { |entry| entry['group'] }.uniq.length

@@ -13,7 +13,7 @@ module Arxiv
         entry = @data[id]
         return nil if entry.nil?
 
-        { id: id, name: entry['name'], group: entry['group'] }
+        { id: id, name: entry['name'], group: entry['group'], description: entry['description'] }
       end
     end
   end

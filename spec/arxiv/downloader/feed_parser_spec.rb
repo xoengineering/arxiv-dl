@@ -37,17 +37,24 @@ RSpec.describe Arxiv::Downloader::FeedParser do
     end
 
     it 'extracts the primary category as id, name, group' do
-      expect(metadata.primary_category).to eq(
+      expect(metadata.primary_category).to include(
         id:    'cs.CL',
         name:  'Computation and Language',
         group: 'Computer Science'
       )
     end
 
+    it 'includes the description on the primary category' do
+      expect(metadata.primary_category[:description]).to start_with 'Covers natural language processing'
+    end
+
     it 'extracts all categories as id, name, group' do
-      expect(metadata.categories).to eq [
-        { id: 'cs.CL', name: 'Computation and Language', group: 'Computer Science' }
-      ]
+      expect(metadata.categories.length).to eq 1
+      expect(metadata.categories.first).to include(
+        id:    'cs.CL',
+        name:  'Computation and Language',
+        group: 'Computer Science'
+      )
     end
 
     it 'returns nil for comment when none is present' do
