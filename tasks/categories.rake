@@ -44,7 +44,7 @@ namespace :categories do
       # #{categories.length} categories across #{groups_count} groups
     COMMENT
 
-    File.write output_path, "#{header}#{categories.to_yaml}"
+    File.write output_path, "#{header}#{categories.to_yaml(line_width: -1)}"
 
     puts "wrote #{categories.length} categories to #{output_path}"
   end
