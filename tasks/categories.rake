@@ -1,9 +1,7 @@
 namespace :categories do
   desc 'Refresh lib/arxiv/downloader/categories.yaml from arxiv.org/category_taxonomy'
   task :update do
-    require 'date'
     require 'nokogiri'
-    require 'yaml'
     require_relative '../lib/arxiv/downloader'
 
     taxonomy_url = 'https://arxiv.org/category_taxonomy'
