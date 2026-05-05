@@ -4,7 +4,7 @@ First release. Per-paper offline archive of arxiv.org papers, with PDF, abstract
 
 ### CLI
 
-- `arxiv-dl <ARXIV_ID_OR_URL>...` accepts bare IDs, prefixed IDs, legacy IDs (`cs/0002001`), versioned IDs (`1512.03385v2`), and `/abs`, `/pdf`, `/html` URLs.
+- `arxiv-dl <ARXIV_ID_OR_URL>...` accepts bare IDs, prefixed IDs, legacy IDs (`cs/0002001`), versioned IDs (`2508.16190v1`), and `/abs`, `/pdf`, `/html` URLs.
 - Flags: `-p/--path PATH`, `--rate-limit SECONDS`, `-v/--verbose`, `-q/--quiet`, `--version`, `-h/--help`. `-v` and `-q` are mutually exclusive.
 - ENV fallbacks: `ARXIV_DOWNLOAD_PATH`, `ARXIV_RATE_LIMIT`. Precedence: CLI flag > ENV > default.
 - Default download path: `$HOME/Downloads/ArXiv_Papers`. Default rate limit: 3 seconds (arxiv etiquette).

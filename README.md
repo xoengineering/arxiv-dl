@@ -30,13 +30,13 @@ arxiv-dl <ARXIV_ID_OR_URL> [<ARXIV_ID_OR_URL>...]
 
 Accepted input forms:
 
-- Bare ID: `1512.03385`
-- Prefixed ID: `arXiv:1512.03385`
+- Bare ID: `2508.16190`
+- Prefixed ID: `arXiv:2508.16190`
 - Legacy ID: `cs/0002001`, `alg-geom/9708001`
-- Versioned ID: `1512.03385v2`
-- Abstract URL: `https://arxiv.org/abs/1512.03385`
-- PDF URL: `https://arxiv.org/pdf/1512.03385.pdf`
-- HTML URL: `https://arxiv.org/html/2506.15442`
+- Versioned ID: `2508.16190v1`
+- Abstract URL: `https://arxiv.org/abs/2508.16190`
+- PDF URL: `https://arxiv.org/pdf/2508.16190.pdf`
+- HTML URL: `https://arxiv.org/html/2508.16190`
 
 ### Flags
 
@@ -65,25 +65,25 @@ Precedence: CLI flag > ENV var > default.
 Download a single paper to the default location:
 
 ```sh
-arxiv-dl 1512.03385
+arxiv-dl 2508.16190
 ```
 
 Download to a custom directory:
 
 ```sh
-arxiv-dl --path ~/Archives/arxiv 1512.03385
+arxiv-dl --path ~/Archives/arxiv 2508.16190
 ```
 
 Download multiple papers, verbose:
 
 ```sh
-arxiv-dl -v 1512.03385 2508.16190 cs/0002001
+arxiv-dl -v 2508.16190 1207.7214 cs/0002001
 ```
 
 Disable rate limiting (when running against a local mirror, etc):
 
 ```sh
-arxiv-dl --rate-limit 0 1512.03385
+arxiv-dl --rate-limit 0 2508.16190
 ```
 
 ## Output layout
@@ -107,7 +107,7 @@ $ARXIV_DOWNLOAD_PATH/                   # default: $HOME/Downloads/ArXiv_Papers
       *.tex, *.bbl, ...                 # extracted from /src/<id> tarball
 ```
 
-`YYYY/MM/DD` is the original submission date. `<primary_category>` is from the paper's metadata (`cs.CV`, `math.NT`, etc). `<slug>` is derived from the paper title (Unicode → ASCII, hyphenated, truncated to 80 chars at a word boundary).
+`YYYY/MM/DD` is the original submission date. `<primary_category>` is from the paper's metadata (`cs.CL`, `math.NT`, etc). `<slug>` is derived from the paper title (Unicode → ASCII, hyphenated, truncated to 80 chars at a word boundary).
 
 For legacy IDs containing `/` (e.g. `cs/0002001`), the slash is replaced with `-` in the directory name (`cs-0002001-...`).
 
@@ -116,10 +116,10 @@ For legacy IDs containing `/` (e.g. `cs/0002001`), the slash is replaced with `-
 ```ruby
 require 'arxiv/downloader'
 
-identifier = Arxiv::Downloader::Identifier.new '1512.03385'
+identifier = Arxiv::Downloader::Identifier.new '2508.16190'
 client     = Arxiv::Downloader::Client.new                # 3-second rate limit by default
 path       = Arxiv::Downloader::Archive.new(identifier, root: '/tmp/papers', client: client).run
-# => "/tmp/papers/2015/12/10/cs.CV/1512.03385-deep-residual-learning-for-image-recognition"
+# => "/tmp/papers/2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis"
 ```
 
 ## Development

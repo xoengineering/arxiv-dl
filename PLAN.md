@@ -11,13 +11,13 @@ Given an arxiv paper identifier (in any common form), produce a self-contained p
 - arxiv.org only.
 - Rate limit: enforce ~1 req / 3s by default (arxiv etiquette). Overridable via `ARXIV_RATE_LIMIT` ENV var (seconds between requests, `0` to disable) and `--rate-limit <seconds>` CLI flag. Precedence: CLI flag > ENV var > default (`3`).
 - Input forms:
-  - Bare ID: `1512.03385`
-  - Prefixed ID: `arXiv:1512.03385`
+  - Bare ID: `2508.16190`
+  - Prefixed ID: `arXiv:2508.16190`
   - Legacy ID: `cs/0002001`, `alg-geom/9708001`
-  - Abstract URL: `https://arxiv.org/abs/1512.03385`
-  - PDF URL: `https://arxiv.org/pdf/1512.03385.pdf`
-  - HTML URL: `https://arxiv.org/html/2506.15442`
-  - Versioned IDs: `1512.03385v2`
+  - Abstract URL: `https://arxiv.org/abs/2508.16190`
+  - PDF URL: `https://arxiv.org/pdf/2508.16190.pdf`
+  - HTML URL: `https://arxiv.org/html/2508.16190`
+  - Versioned IDs: `2508.16190v1`
 - Per-paper artifacts downloaded:
   - **PDF** (`/pdf/<id>.pdf`) — primary paper.
   - **Abstract page** (`/abs/<id>`) — single self-contained HTML.
@@ -64,27 +64,27 @@ $ARXIV_DOWNLOAD_PATH/   # default: $HOME/Downloads/ArXiv_Papers
       *.tex, *.bbl, etc.     # extracted from /src/<id> tarball
 ```
 
-Concrete example (ResNet, primary category cs.CV, submitted 2015-12-10):
+Concrete example (ComicScene154, primary category cs.CL, submitted 2025-08-22):
 
 ```txt
-2015/12/10/cs.CV/1512.03385-deep-residual-learning-for-image-recognition/
-  1512.03385.pdf
-  1512.03385-abstract.html
+2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis/
+  2508.16190.pdf
+  2508.16190-abstract.html
   metadata.md
   metadata.yaml
   metadata.json
   metadata.bib
   html/
-    1512.03385.html
-    x1.png ... x7.png
+    2508.16190.html
+    x1.png, x2.png, ...
   src/
-    main.tex, refs.bbl, ...
+    main.tex, refs.bib, figures/figure1.png, ...
 ```
 
 ### Path components
 
 - `YYYY/MM/DD` — from arxiv metadata `published` field (original submission date).
-- `<primary_category>` — from arxiv metadata `primary_category.id` (e.g. `cs.CV`, `math.NT`).
+- `<primary_category>` — from arxiv metadata `primary_category.id` (e.g. `cs.CL`, `math.NT`).
 - `<arxiv-id>` — for legacy IDs containing `/`, replace `/` with `-` (e.g. `cs/0002001` → `cs-0002001`).
 - `<slug>` — derived from paper title via [`stringex`](https://github.com/rsl/stringex):
   - `title.to_url` (transliterates Greek/math/Unicode → ASCII, lowercases, hyphenates, strips punctuation)
