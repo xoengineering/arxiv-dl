@@ -30,13 +30,15 @@ arxiv-dl <ARXIV_ID_OR_URL> [<ARXIV_ID_OR_URL>...]
 
 Accepted input forms:
 
-- Bare ID: `2508.16190`
-- Prefixed ID: `arXiv:2508.16190`
-- Legacy ID: `cs/0002001`, `alg-geom/9708001`
-- Versioned ID: `2508.16190v1`
-- Abstract URL: `https://arxiv.org/abs/2508.16190`
-- PDF URL: `https://arxiv.org/pdf/2508.16190.pdf`
-- HTML URL: `https://arxiv.org/html/2508.16190`
+| Form          | Example                                |
+| ------------- | -------------------------------------- |
+| Bare ID       | `2508.16190`                           |
+| Prefixed ID   | `arXiv:2508.16190`                     |
+| Legacy ID     | `cs/0002001`, `alg-geom/9708001`       |
+| Versioned ID  | `2508.16190v1`                         |
+| Abstract URL  | `https://arxiv.org/abs/2508.16190`     |
+| PDF URL       | `https://arxiv.org/pdf/2508.16190.pdf` |
+| HTML URL      | `https://arxiv.org/html/2508.16190`    |
 
 ### Flags
 
