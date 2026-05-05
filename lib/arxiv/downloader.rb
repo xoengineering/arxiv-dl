@@ -17,6 +17,7 @@ require_relative 'downloader/metadata/yaml'
 require_relative 'downloader/metadata/json'
 require_relative 'downloader/metadata/bibtex'
 require_relative 'downloader/metadata/markdown'
+require_relative 'downloader/archive'
 
 module Arxiv
   module Downloader

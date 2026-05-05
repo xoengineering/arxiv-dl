@@ -6,3 +6,4 @@
 - HTML archive: fetch `/html/<id>`, download relative images as siblings, route same-host and CDN assets through assets cache, rewrite paths
 - Add nokogiri runtime dependency for HTML parsing
 - Sidecar writers: `Metadata::Markdown`, `Metadata::YAML`, `Metadata::JSON`, `Metadata::Bibtex` produce `metadata.{md,yaml,json,bib}` in a target directory
+- Archive orchestrator: `Archive.new(identifier, root:).run` fetches metadata, computes the per-paper path, downloads PDF, abstract, HTML+assets, source tarball, and writes all sidecars
