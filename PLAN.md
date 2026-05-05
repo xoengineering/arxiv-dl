@@ -176,7 +176,7 @@ Each milestone is its own commit; each commit is green (`script/test` passes).
 16. ✅ **Archive orchestrator** — `Archive.new(identifier, root:).run` ties everything together: fetch metadata → compute path → download all artifacts → write sidecars. Returns the absolute paper directory path.
 17. ✅ **CLI** — `Cli.new(argv).run` wires Archive. Flags: `-p/--path <path>`, `--rate-limit <seconds>`, `-v/--verbose`, `-q/--quiet`, `--version`, `-h/--help`. ENV fallbacks: `ARXIV_DOWNLOAD_PATH`, `ARXIV_RATE_LIMIT`. `-v` and `-q` mutually exclusive. Verbose mode logs each HTTP request via Client's `log:` sink.
 18. ✅ **README** — usage examples, install, env vars, output layout, library usage.
-19. **CHANGELOG** — finalize the `[Unreleased]` section into `[0.1.0]` at release time. Until then, accumulate user-facing bullets in `[Unreleased]` only as features actually land (skip per-commit churn).
+19. ✅ **CHANGELOG** — finalized `[Unreleased]` section into `[0.1.0]` covering CLI, output layout, library API, and dependencies.
 
 ## Reference
 
