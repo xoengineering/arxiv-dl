@@ -13,6 +13,10 @@ require_relative 'downloader/abstract_page'
 require_relative 'downloader/source_archive'
 require_relative 'downloader/assets_cache'
 require_relative 'downloader/html_archive'
+require_relative 'downloader/metadata/yaml'
+require_relative 'downloader/metadata/json'
+require_relative 'downloader/metadata/bibtex'
+require_relative 'downloader/metadata/markdown'
 
 module Arxiv
   module Downloader

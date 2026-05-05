@@ -172,7 +172,7 @@ Each milestone is its own commit; each commit is green (`script/test` passes).
 12. ✅ **Source archive** — `SourceArchive.new(identifier, client:).download to: dir`: fetch tarball, extract via stdlib `rubygems/package` + `Zlib::GzipReader` in-memory, drop tarball.
 13. ✅ **Assets cache** — `AssetsCache.new(root:, client:).fetch(url)` returns local path under `_shared/<host>/<path>`; downloads only if missing.
 14. ✅ **HTML archive** — `HTMLArchive.new(identifier, client:, assets_cache:).download to: dir`: fetch HTML, parse asset URLs (Nokogiri), fetch relative-path images (sibling), route same-host + CDN to assets cache, rewrite HTML paths.
-15. **Sidecar writers** — `Metadata::Markdown.new(metadata).write`, `Metadata::YAML.new(metadata).write`, `Metadata::JSON.new(metadata).write`, `Metadata::Bibtex.new(metadata).write` produce the four sidecar files.
+15. ✅ **Sidecar writers** — `Metadata::{Markdown,YAML,JSON,Bibtex}.new(metadata).write to: dir` produce the four sidecar files. Bibtex variant takes optional `client:` for upstream fetch.
 16. **Archive orchestrator** — `Archive.new(identifier, root:).run` ties everything together: fetch metadata → compute path → download all artifacts → write sidecars.
 17. **CLI** — `Cli.new(argv).run` wires Archive. Flags: `-p/--path <path>`, `--rate-limit <seconds>`, `-v/--verbose`, `-q/--quiet`, `--version`, `-h/--help`. ENV fallbacks: `ARXIV_DOWNLOAD_PATH`, `ARXIV_RATE_LIMIT`. `-v` and `-q` mutually exclusive.
 18. **README** — usage examples, install, env vars, output layout.

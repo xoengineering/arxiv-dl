@@ -33,18 +33,18 @@ module Arxiv
         fetch || synthesize
       end
 
-      private
-
-      def url
-        "https://arxiv.org/bibtex/#{@metadata.arxiv_id}"
-      end
-
       def key
         last_name  = @metadata.authors.first.split.last.downcase.gsub(/[^a-z]/, '')
         year       = @metadata.published.year
         title_word = Slug.new(@metadata.title).to_s.split('-').first
 
         "#{last_name}#{year}#{title_word}"
+      end
+
+      private
+
+      def url
+        "https://arxiv.org/bibtex/#{@metadata.arxiv_id}"
       end
 
       def authors
