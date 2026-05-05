@@ -11,6 +11,7 @@ require_relative 'downloader/pdf'
 require_relative 'downloader/bibtex'
 require_relative 'downloader/abstract_page'
 require_relative 'downloader/source_archive'
+require_relative 'downloader/assets_cache'
 
 module Arxiv
   module Downloader
