@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'arxiv/dl'
+require 'arxiv/downloader'
+
+exit Arxiv::Downloader::Cli.new(ARGV).run

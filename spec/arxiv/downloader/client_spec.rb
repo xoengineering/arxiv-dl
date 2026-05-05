@@ -80,5 +80,15 @@ RSpec.describe Arxiv::Downloader::Client do
         expect(client).not_to have_received(:sleep)
       end
     end
+
+    context 'with a log sink' do
+      it 'writes a step line per request with URL and byte count' do
+        log = StringIO.new
+        described_class.new(rate_limit: 0, log: log).get url
+
+        expect(log.string).to include "==> GET #{url}"
+        expect(log.string).to include "(#{body.bytesize} bytes)"
+      end
+    end
   end
 end

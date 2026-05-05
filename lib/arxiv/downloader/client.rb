@@ -8,8 +8,9 @@ module Arxiv
 
       attr_reader :rate_limit
 
-      def initialize rate_limit: DEFAULT_RATE_LIMIT
+      def initialize rate_limit: DEFAULT_RATE_LIMIT, log: nil
         @rate_limit = rate_limit
+        @log        = log
       end
 
       def user_agent
@@ -20,10 +21,17 @@ module Arxiv
         throttle
         response = HTTP.headers('User-Agent' => user_agent).follow.get(url)
         @last_request_at = Time.now
+        log_request url, response
         response
       end
 
       private
+
+      def log_request url, response
+        return if @log.nil?
+
+        @log.puts "==> GET #{url} (#{response.body.to_s.bytesize} bytes)"
+      end
 
       def throttle
         return if @rate_limit.zero?

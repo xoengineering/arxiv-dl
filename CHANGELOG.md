@@ -7,3 +7,5 @@
 - Add nokogiri runtime dependency for HTML parsing
 - Sidecar writers: `Metadata::Markdown`, `Metadata::YAML`, `Metadata::JSON`, `Metadata::Bibtex` produce `metadata.{md,yaml,json,bib}` in a target directory
 - Archive orchestrator: `Archive.new(identifier, root:).run` fetches metadata, computes the per-paper path, downloads PDF, abstract, HTML+assets, source tarball, and writes all sidecars
+- HTTP client: optional `log:` sink prints `==> GET <url> (<bytes> bytes)` per request
+- CLI: `arxiv-dl <ARXIV_ID_OR_URL>...` with `-p/--path`, `--rate-limit`, `-v/--verbose`, `-q/--quiet`, `--version`, `-h/--help`; ENV fallbacks `ARXIV_DOWNLOAD_PATH` and `ARXIV_RATE_LIMIT`
