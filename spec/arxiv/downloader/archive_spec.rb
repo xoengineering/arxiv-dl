@@ -14,6 +14,7 @@ RSpec.describe Arxiv::Downloader::Archive do
   let(:x1_url)       { 'https://arxiv.org/html/2508.16190/x1.png' }
   let(:x2_url)       { 'https://arxiv.org/html/2508.16190/x2.png' }
   let(:css_url)      { 'https://arxiv.org/static/browse/0.3.4/css/ar5iv.0.7.9.min.css' }
+  let(:js_url)       { 'https://arxiv.org/static/browse/0.3.4/js/addons_new.js' }
   let(:cdn_css_url)  { 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' }
   let(:cdn_js_url)   { 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js' }
 
@@ -27,6 +28,7 @@ RSpec.describe Arxiv::Downloader::Archive do
     stub_request(:get, x1_url).to_return(status: 200, body: File.binread('spec/fixtures/http/html-x1.png'))
     stub_request(:get, x2_url).to_return(status: 200, body: File.binread('spec/fixtures/http/html-x1.png'))
     stub_request(:get, css_url).to_return(status: 200, body: 'body{}')
+    stub_request(:get, js_url).to_return(status: 200, body: 'function overlay(){}')
     stub_request(:get, cdn_css_url).to_return(status: 200, body: '.btn{}')
     stub_request(:get, cdn_js_url).to_return(status: 200, body: 'function noop(){}')
   end

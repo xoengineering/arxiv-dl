@@ -38,17 +38,25 @@ module Arxiv
         reference = node[attribute]
         return if reference.nil? || reference.empty?
 
-        if relative? reference
-          download_relative reference, html_dir
-        else
-          cache_remote node, attribute, reference, html_dir
+        case reference_type(reference)
+        when :page_relative then download_relative reference, html_dir
+        when :remote        then cache_remote node, attribute, reference, html_dir
+        when :root_relative then cache_remote node, attribute, "https://arxiv.org#{reference}", html_dir
         end
       end
 
-      def relative? reference
-        URI.parse(reference).scheme.nil?
+      # :skip covers refs that can't or shouldn't be fetched: data:/javascript:/
+      # mailto: URIs, protocol-relative refs, and malformed URIs. They are left
+      # in the HTML untouched.
+      def reference_type reference
+        uri = URI.parse reference
+        return :remote if %w[http https].include? uri.scheme
+        return :skip unless uri.scheme.nil? && uri.host.nil?
+        return :root_relative if reference.start_with? '/'
+
+        :page_relative
       rescue URI::InvalidURIError
-        false
+        :skip
       end
 
       def download_relative reference, html_dir
