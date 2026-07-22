@@ -30,35 +30,35 @@ arxiv-dl <ARXIV_ID_OR_URL> [<ARXIV_ID_OR_URL>...]
 
 Accepted input forms:
 
-| Form          | Example                                |
-| ------------- | -------------------------------------- |
-| Bare ID       | `2508.16190`                           |
-| Prefixed ID   | `arXiv:2508.16190`                     |
-| Legacy ID     | `cs/0002001`, `alg-geom/9708001`       |
-| Versioned ID  | `2508.16190v1`                         |
-| Abstract URL  | `https://arxiv.org/abs/2508.16190`     |
-| PDF URL       | `https://arxiv.org/pdf/2508.16190.pdf` |
-| HTML URL      | `https://arxiv.org/html/2508.16190`    |
+| Form         | Example                                |
+| ------------ | -------------------------------------- |
+| Bare ID      | `2508.16190`                           |
+| Prefixed ID  | `arXiv:2508.16190`                     |
+| Legacy ID    | `cs/0002001`, `alg-geom/9708001`       |
+| Versioned ID | `2508.16190v1`                         |
+| Abstract URL | `https://arxiv.org/abs/2508.16190`     |
+| PDF URL      | `https://arxiv.org/pdf/2508.16190.pdf` |
+| HTML URL     | `https://arxiv.org/html/2508.16190`    |
 
 ### Flags
 
-| Flag                       | Description                                              |
-| -------------------------- | -------------------------------------------------------- |
-| `-p PATH`, `--path PATH`   | Root download directory                                  |
-| `--rate-limit SECONDS`     | Seconds between HTTP requests; `0` disables throttling   |
-| `-v`, `--verbose`          | Print step lines and per-request URL/byte logs to stdout |
-| `-q`, `--quiet`            | Print nothing; success/failure conveyed via exit code    |
-| `--version`                | Print the gem version and exit                           |
-| `-h`, `--help`             | Print help and exit                                      |
+| Flag                     | Description                                              |
+| ------------------------ | -------------------------------------------------------- |
+| `-p PATH`, `--path PATH` | Root download directory                                  |
+| `--rate-limit SECONDS`   | Seconds between HTTP requests; `0` disables throttling   |
+| `-v`, `--verbose`        | Print step lines and per-request URL/byte logs to stdout |
+| `-q`, `--quiet`          | Print nothing; success/failure conveyed via exit code    |
+| `--version`              | Print the gem version and exit                           |
+| `-h`, `--help`           | Print help and exit                                      |
 
 `-v` and `-q` are mutually exclusive.
 
 ### Environment variables
 
-| Variable               | Effect                                                                          |
-| ---------------------- | ------------------------------------------------------------------------------- |
-| `ARXIV_DOWNLOAD_PATH`  | Root download directory (default: `$HOME/Downloads/ArXiv_Papers`)               |
-| `ARXIV_RATE_LIMIT`     | Seconds between HTTP requests (default: `3`, per arxiv etiquette; `0` disables) |
+| Variable              | Effect                                                                          |
+| --------------------- | ------------------------------------------------------------------------------- |
+| `ARXIV_DOWNLOAD_PATH` | Root download directory (default: `$HOME/Downloads/ArXiv_Papers`)               |
+| `ARXIV_RATE_LIMIT`    | Seconds between HTTP requests (default: `3`, per arxiv etiquette; `0` disables) |
 
 Precedence: CLI flag > ENV var > default.
 
