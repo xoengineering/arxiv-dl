@@ -33,7 +33,6 @@ Gem::Specification.new do |spec|
           .rubocop.yml
           .ruby-version
           Gemfile
-          PLAN.md
           Rakefile
           bin/
           script/
