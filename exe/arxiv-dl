@@ -2,4 +2,4 @@
 
 require 'arxiv/downloader'
 
-exit Arxiv::Downloader::Cli.new(ARGV).run
+exit Arxiv::Downloader::CLI.new(ARGV).run

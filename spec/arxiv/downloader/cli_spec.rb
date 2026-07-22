@@ -1,6 +1,6 @@
 require 'tmpdir'
 
-RSpec.describe Arxiv::Downloader::Cli do
+RSpec.describe Arxiv::Downloader::CLI do
   let(:stdout) { StringIO.new }
   let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis' }
   let(:stderr) { StringIO.new }

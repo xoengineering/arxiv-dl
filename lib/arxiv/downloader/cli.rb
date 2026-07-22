@@ -2,7 +2,7 @@ require 'optparse'
 
 module Arxiv
   module Downloader
-    class Cli
+    class CLI
       DEFAULT_DOWNLOAD_PATH = File.join Dir.home, 'Downloads', 'ArXiv_Papers'
       USAGE                 = 'Usage: arxiv-dl [options] <ARXIV_ID_OR_URL> [<ARXIV_ID_OR_URL>...]'.freeze
 
