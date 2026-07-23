@@ -1,3 +1,9 @@
+## [0.1.1]
+
+Bug fix: the HTML archive step crashed with `NoMethodError` on papers whose HTML embeds `data:` URI images (e.g. arxiv's feedback-overlay mascot), and mis-fetched root-relative `/static/...` asset references from a wrong page-relative URL.
+
+- Asset references are now routed by type: page-relative refs download as siblings, absolute `http(s)` refs cache under `_shared/`, root-relative refs are absolutized against `arxiv.org` and cache under `_shared/`, and unfetchable refs (`data:`, `javascript:`, `mailto:`, malformed URIs) are left in the HTML untouched.
+
 ## [0.1.0]
 
 First release. Per-paper offline archive of arxiv.org papers, with PDF, abstract HTML, full HTML version (with relative-path images and a deduplicated cross-paper shared assets cache), TeX source, and four metadata sidecar files.
