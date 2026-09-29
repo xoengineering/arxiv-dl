@@ -1,3 +1,7 @@
+## [0.3.2]
+
+- `PaperFolder` now comes from [dl-core](https://github.com/xoengineering/dl-core) 0.2. `Arxiv::Downloader::PaperFolder` subclasses it and keeps rewriting `html/` links when a flat version moves into `v<N>/`. No change in behavior or output.
+
 ## [0.3.1]
 
 - Built on [dl-core](https://github.com/xoengineering/dl-core) 0.1: the HTTP client, errors, `Author`, `Slug`, sidecar writers, and CLI now come from it instead of copies. No change in behavior or output. `Arxiv::Downloader::Client`, `HTTPError`, `Author`, `Slug`, and `Metadata::YAML`/`JSON` still work; they are now `dl-core`'s classes. `Arxiv::Downloader::Error` now subclasses `DL::Core::Error`.
