@@ -1,3 +1,9 @@
+## [Unreleased]
+
+### Breaking
+
+- Single-version papers are archived flat again: a paper whose only archived version is v1 keeps its files directly in the paper folder, without a `v1/` level. `v<N>/` folders are used only when a paper has more than one version. Archiving a second version of a flat paper moves the existing files into `v<N>/` first, rewriting `html/` links into `_shared/` for the new depth. A paper whose latest version is v2 or later starts out in `v<N>/` folders. Existing 0.2.0 archives keep their `v1/` folders.
+
 ## [0.2.0]
 
 Versioned archives, author affiliations, and a round of robustness fixes. Two breaking changes to the output layout and metadata; see below.

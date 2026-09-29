@@ -2,7 +2,7 @@ require 'tmpdir'
 
 RSpec.describe Arxiv::Downloader::Archive do
   let(:identifier) { Arxiv::Downloader::Identifier.new '2508.16190' }
-  let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis/v1' }
+  let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis' }
   let(:client) { Arxiv::Downloader::Client.new(rate_limit: 0) }
 
   let(:atom_url)     { 'https://export.arxiv.org/api/query?id_list=2508.16190' }
@@ -42,7 +42,7 @@ RSpec.describe Arxiv::Downloader::Archive do
       end
     end
 
-    it 'creates the YYYY/MM/DD/<cat>/<id>-<slug>/v<N>/ directory for the latest version' do
+    it 'creates the YYYY/MM/DD/<cat>/<id>-<slug>/ directory, flat for a single-version paper' do
       Dir.mktmpdir do |root|
         described_class.new(identifier, root: root, client: client).run
 
@@ -112,6 +112,19 @@ RSpec.describe Arxiv::Downloader::Archive do
       end
     end
 
+    it 'links the archived HTML to cached assets that exist' do
+      Dir.mktmpdir do |root|
+        described_class.new(identifier, root: root, client: client).run
+
+        html_dir = File.join root, expected_dir, 'html'
+        document = Nokogiri::HTML File.read(File.join(html_dir, '2508.16190v1.html'))
+        shared   = document.css('link[rel="stylesheet"]').map { it['href'] }.select { it.include? '_shared' }
+
+        expect(shared).not_to be_empty
+        shared.each { expect(File).to exist File.expand_path(it, html_dir) }
+      end
+    end
+
     context 'when the version is already archived' do
       it 'skips the downloads and returns the existing folder' do
         Dir.mktmpdir do |root|
@@ -129,7 +142,7 @@ RSpec.describe Arxiv::Downloader::Archive do
 
       before { stub_request(:get, src_url).to_return({ status: 500 }, { status: 200, body: src_body }) }
 
-      it 'leaves no v<N>/ folder, so the version is not mistaken for archived' do
+      it 'leaves no paper folder, so the version is not mistaken for archived' do
         Dir.mktmpdir do |root|
           archive = described_class.new(identifier, root: root, client: client)
 
@@ -154,12 +167,42 @@ RSpec.describe Arxiv::Downloader::Archive do
       let(:identifier) { Arxiv::Downloader::Identifier.new '2508.16190v1' }
       let(:atom_url)   { 'https://export.arxiv.org/api/query?id_list=2508.16190v1' }
 
-      it 'asks the API for that version and archives it under v<N>/' do
+      it 'asks the API for that version' do
         Dir.mktmpdir do |root|
           path = described_class.new(identifier, root: root, client: client).run
 
           expect(WebMock).to have_requested :get, atom_url
           expect(path).to eq File.join(root, expected_dir)
+        end
+      end
+    end
+
+    context 'when another version already has a v<N>/ folder' do
+      it 'archives this version into its own v<N>/ folder' do
+        Dir.mktmpdir do |root|
+          FileUtils.mkdir_p File.join(root, expected_dir, 'v2')
+
+          path = described_class.new(identifier, root: root, client: client).run
+
+          expect(path).to eq File.join(root, expected_dir, 'v1')
+          expect(File).to exist File.join(path, '2508.16190v1.pdf')
+        end
+      end
+    end
+
+    context 'when another version is already archived flat' do
+      it 'moves that version into its v<N>/ folder and archives this one beside it' do
+        Dir.mktmpdir do |root|
+          paper_dir = File.join root, expected_dir
+          earlier   = Arxiv::Downloader::FeedParser.new(File.read('spec/fixtures/http/atom-2508.16190.xml')).metadata
+          Arxiv::Downloader::Metadata::YAML.new(earlier.with(version: 2)).write to: paper_dir
+
+          path = described_class.new(identifier, root: root, client: client).run
+
+          expect(path).to eq File.join(paper_dir, 'v1')
+          expect(File).to     exist File.join(paper_dir, 'v1', '2508.16190v1.pdf')
+          expect(File).to     exist File.join(paper_dir, 'v2', 'metadata.yaml')
+          expect(File).not_to exist File.join(paper_dir, 'metadata.yaml')
         end
       end
     end

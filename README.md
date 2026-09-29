@@ -108,27 +108,40 @@ $ARXIV_DOWNLOAD_PATH/                   # default: $HOME/Downloads/ArXiv_Papers
     arxiv.org/static/...
     cdn.jsdelivr.net/...
   YYYY/MM/DD/<primary_category>/<arxiv-id>-<slug>/
-    v<N>/                               # one folder per archived version
-      <arxiv-id>v<N>.pdf
-      <arxiv-id>v<N>-abstract.html
-      metadata.md                       # YAML frontmatter + Markdown body
-      metadata.yaml
-      metadata.json
-      metadata.bib                      # upstream BibTeX, falls back to synthesized
-      html/                             # absent when the paper has no HTML version
-        <arxiv-id>v<N>.html             # path-rewritten to local assets
-        x1.png, x2.png, ...             # paper-specific images
-      src/                              # absent for PDF-only submissions
-        *.tex, *.bbl, ...               # extracted from /src/<id>v<N>
+    <arxiv-id>v<N>.pdf
+    <arxiv-id>v<N>-abstract.html
+    metadata.md                         # YAML frontmatter + Markdown body
+    metadata.yaml
+    metadata.json
+    metadata.bib                        # upstream BibTeX, falls back to synthesized
+    html/                               # absent when the paper has no HTML version
+      <arxiv-id>v<N>.html               # path-rewritten to local assets
+      x1.png, x2.png, ...               # paper-specific images
+    src/                                # absent for PDF-only submissions
+      *.tex, *.bbl, ...                 # extracted from /src/<id>v<N>
 ```
 
-An unversioned ID (`2508.16190`) archives the latest version. A versioned ID (`2508.16190v1`) archives that version. Different versions of the same paper sit side by side under the same paper folder.
+An unversioned ID (`2508.16190`) archives the latest version. A versioned ID (`2508.16190v1`) archives that version.
 
-Each version downloads into `v<N>.partial/` and is renamed to `v<N>/` only when every file succeeded. Re-running skips versions whose `v<N>/` already exists and retries interrupted ones from scratch.
+A paper with a single archived version v1 is kept flat, as above. When a paper has more than one version, each version gets its own `v<N>/` folder with the same contents:
+
+```txt
+  YYYY/MM/DD/<primary_category>/<arxiv-id>-<slug>/
+    v1/
+      <arxiv-id>v1.pdf
+      ...
+    v2/
+      <arxiv-id>v2.pdf
+      ...
+```
+
+Archiving a second version of a flat paper first moves the existing files into `v<N>/` (rewriting `html/` links into `_shared/` for the new depth). A paper whose latest version is v2 or later starts out in `v<N>/` folders.
+
+Each version downloads into a sibling `.partial` folder and is renamed into place only when every file succeeded. Re-running skips versions already archived and retries interrupted ones from scratch.
 
 `YYYY/MM/DD` is the original submission date. `<primary_category>` is from the paper's metadata (`cs.CL`, `math.NT`, etc). `<slug>` is derived from the paper title (Unicode → ASCII, hyphenated, truncated to 80 chars at a word boundary).
 
-For legacy IDs containing `/` (e.g. `cs/0002001`), the slash is replaced with `-` in the directory name and file names (`cs-0002001-.../v1/cs-0002001v1.pdf`).
+For legacy IDs containing `/` (e.g. `cs/0002001`), the slash is replaced with `-` in the directory name and file names (`cs-0002001-.../cs-0002001v1.pdf`).
 
 ## Library usage
 
@@ -138,7 +151,7 @@ require 'arxiv/downloader'
 identifier = Arxiv::Downloader::Identifier.new '2508.16190'
 client     = Arxiv::Downloader::Client.new                # 3-second rate limit by default
 path       = Arxiv::Downloader::Archive.new(identifier, root: '/tmp/papers', client: client).run
-# => "/tmp/papers/2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis/v1"
+# => "/tmp/papers/2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis"
 ```
 
 ## Development

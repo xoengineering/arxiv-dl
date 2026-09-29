@@ -2,7 +2,7 @@ require 'tmpdir'
 
 RSpec.describe Arxiv::Downloader::CLI do
   let(:stdout) { StringIO.new }
-  let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis/v1' }
+  let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis' }
   let(:stderr) { StringIO.new }
 
   let(:atom_url)     { 'https://export.arxiv.org/api/query?id_list=2508.16190' }
