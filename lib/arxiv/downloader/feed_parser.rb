@@ -1,35 +1,11 @@
 require 'feedjira'
+require_relative 'feed_parser/author'
+require_relative 'feed_parser/atom_entry'
+require_relative 'feed_parser/atom_feed'
 
 module Arxiv
   module Downloader
     class FeedParser
-      class Author
-        include SAXMachine
-
-        element  :name
-        elements 'arxiv:affiliation', as: :affiliations
-      end
-
-      class AtomEntry < Feedjira::Parser::AtomEntry
-        elements :author, as: :authors, class: Author
-
-        element 'arxiv:primary_category', as: :primary_category_id, value: :term
-        element 'arxiv:comment',          as: :comment
-        element 'arxiv:doi',              as: :doi
-        element 'arxiv:journal_ref',      as: :journal_ref
-      end
-
-      class AtomFeed
-        include SAXMachine
-        include Feedjira::FeedUtilities
-
-        elements :entry, as: :entries, class: AtomEntry
-
-        def self.able_to_parse? xml
-          xml.include? 'http://www.w3.org/2005/Atom'
-        end
-      end
-
       Feedjira.configure { |config| config.parsers = [AtomFeed] + config.parsers }
 
       def initialize xml
