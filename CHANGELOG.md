@@ -6,6 +6,7 @@ Breaking: author affiliations. `Metadata#authors` is now a list of `Arxiv::Downl
 - `metadata.yaml`, `metadata.json`, and the `metadata.md` frontmatter write `authors` as a list of `{ name, affiliations }`.
 - The `metadata.md` body lists affiliations after each author name: `- Jon S. Lawrence (Australian Astronomical Observatory; Macquarie University)`.
 - BibTeX output is unchanged: names only.
+- Minimum Ruby version is now 4.0.7.
 
 ## [0.1.1]
 
