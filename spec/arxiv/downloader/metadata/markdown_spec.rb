@@ -49,7 +49,11 @@ RSpec.describe Arxiv::Downloader::Metadata::Markdown do
 
         body, frontmatter = parsed File.join(dir, 'metadata.md')
         expect(frontmatter.keys).to include(
-          'arxiv_id', 'version', 'arxiv_url', 'pdf_url', 'title', 'authors',
+          'arxiv_id',
+          'version',
+          'arxiv_url',
+          'pdf_url',
+          'title', 'authors',
           'published', 'updated', 'primary_category', 'categories',
           'comment', 'doi', 'journal_ref', 'bibtex_key', 'abstract'
         )
