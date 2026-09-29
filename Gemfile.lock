@@ -134,8 +134,8 @@ PLATFORMS
 DEPENDENCIES
   arxiv-dl!
   irb
-  rake (~> 13.4)
-  rspec (~> 3.13)
+  rake
+  rspec
   rubocop
   rubocop-performance
   rubocop-rake
