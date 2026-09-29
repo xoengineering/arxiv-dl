@@ -53,9 +53,14 @@ RSpec.describe Arxiv::Downloader::Metadata::Markdown do
           'version',
           'arxiv_url',
           'pdf_url',
-          'title', 'authors',
-          'published', 'updated', 'primary_category', 'categories',
-          'comment', 'doi', 'journal_ref', 'bibtex_key', 'abstract'
+          'title',
+          'authors',
+          'published',
+          'updated',
+          'primary_category',
+          'categories',
+          'comment',
+          'doi', 'journal_ref', 'bibtex_key', 'abstract'
         )
         expect(frontmatter['bibtex_key']).to eq 'paval2025comicscene154'
         expect(body).to include '# ComicScene154: A Scene Dataset for Comic Analysis'

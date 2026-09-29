@@ -13,6 +13,9 @@ module Arxiv
         set_id_and_version
       end
 
+      # the API/URL form: 2508.16190, or 2508.16190v2 when a version is known
+      def to_s = version.nil? ? id : "#{id}v#{version}"
+
       private
 
       # validations

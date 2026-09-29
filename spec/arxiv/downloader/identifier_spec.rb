@@ -676,4 +676,18 @@ RSpec.describe Arxiv::Downloader::Identifier do
       end
     end
   end
+
+  describe '#to_s' do
+    it 'is the bare ID when no version was given' do
+      expect(described_class.new('https://arxiv.org/abs/2508.16190').to_s).to eq '2508.16190'
+    end
+
+    it 'includes the version when one was given' do
+      expect(described_class.new('arXiv:2508.16190v2').to_s).to eq '2508.16190v2'
+    end
+
+    it 'includes the version for legacy IDs' do
+      expect(described_class.new('cs/0002001v1').to_s).to eq 'cs/0002001v1'
+    end
+  end
 end
