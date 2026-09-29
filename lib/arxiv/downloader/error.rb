@@ -1,5 +1,5 @@
 module Arxiv
   module Downloader
-    class Error < StandardError; end
+    class Error < DL::Core::Error; end
   end
 end

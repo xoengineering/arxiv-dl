@@ -1,42 +1,20 @@
-require 'fileutils'
-require 'yaml'
-
 module Arxiv
   module Downloader
     class Metadata
+      # metadata.md: dl-core writes the frontmatter; the body is arxiv-specific
       class Markdown
-        FILENAME = 'metadata.md'.freeze
-
         def initialize metadata
           @metadata = metadata
         end
 
         def write to:
-          FileUtils.mkdir_p to
-          File.write File.join(to, FILENAME), "#{frontmatter}\n#{body}"
+          DL::Core::Sidecar::Markdown.new(@metadata, body:, extras: { bibtex_key: }).write to:
         end
 
         private
 
-        def frontmatter
-          "---\n#{::YAML.dump(stringify(frontmatter_hash)).delete_prefix("---\n")}---"
-        end
-
-        def frontmatter_hash
-          @metadata.to_h.merge bibtex_key: bibtex_key
-        end
-
         def bibtex_key
           Downloader::Bibtex.new(@metadata).key
-        end
-
-        def stringify object
-          case object
-          when Hash  then object.to_h { |key, value| [key.to_s, stringify(value)] }
-          when Array then object.map { |item| stringify item }
-          when Data  then stringify object.to_h
-          else object
-          end
         end
 
         def body
