@@ -2,6 +2,7 @@ RSpec.describe Arxiv::Downloader::Bibtex do
   let(:metadata) do
     Arxiv::Downloader::Metadata.new(
       arxiv_id:         '2508.16190',
+      version:          1,
       arxiv_url:        'https://arxiv.org/abs/2508.16190',
       pdf_url:          'https://arxiv.org/pdf/2508.16190.pdf',
       title:            'ComicScene154: A Scene Dataset for Comic Analysis',

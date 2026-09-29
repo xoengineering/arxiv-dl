@@ -17,10 +17,12 @@ module Arxiv
         entry = @feed.entries.first
         raise PaperNotFound if entry.nil?
 
-        arxiv_id = Identifier.new(entry.entry_id).id
+        identifier = Identifier.new entry.entry_id
+        arxiv_id   = identifier.id
 
         Metadata.new(
           arxiv_id:         arxiv_id,
+          version:          identifier.version,
           arxiv_url:        "https://arxiv.org/abs/#{arxiv_id}",
           pdf_url:          "https://arxiv.org/pdf/#{arxiv_id}.pdf",
           title:            entry.title,

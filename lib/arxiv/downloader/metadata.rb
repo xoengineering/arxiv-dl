@@ -2,6 +2,7 @@ module Arxiv
   module Downloader
     Metadata = Data.define(
       :arxiv_id,
+      :version,
       :arxiv_url,
       :pdf_url,
       :title,

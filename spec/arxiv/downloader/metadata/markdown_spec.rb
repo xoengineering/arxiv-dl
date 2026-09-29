@@ -4,6 +4,7 @@ RSpec.describe Arxiv::Downloader::Metadata::Markdown do
   let(:metadata) do
     Arxiv::Downloader::Metadata.new(
       arxiv_id:         '2508.16190',
+      version:          1,
       arxiv_url:        'https://arxiv.org/abs/2508.16190',
       pdf_url:          'https://arxiv.org/pdf/2508.16190.pdf',
       title:            'ComicScene154: A Scene Dataset for Comic Analysis',
@@ -48,7 +49,7 @@ RSpec.describe Arxiv::Downloader::Metadata::Markdown do
 
         body, frontmatter = parsed File.join(dir, 'metadata.md')
         expect(frontmatter.keys).to include(
-          'arxiv_id', 'arxiv_url', 'pdf_url', 'title', 'authors',
+          'arxiv_id', 'version', 'arxiv_url', 'pdf_url', 'title', 'authors',
           'published', 'updated', 'primary_category', 'categories',
           'comment', 'doi', 'journal_ref', 'bibtex_key', 'abstract'
         )

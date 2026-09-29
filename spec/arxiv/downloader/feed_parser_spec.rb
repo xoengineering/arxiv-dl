@@ -32,6 +32,10 @@ RSpec.describe Arxiv::Downloader::FeedParser do
       expect(metadata.arxiv_id).to eq '2508.16190'
     end
 
+    it 'extracts the version the API returned' do
+      expect(metadata.version).to eq 1
+    end
+
     it 'derives the canonical abstract URL' do
       expect(metadata.arxiv_url).to eq 'https://arxiv.org/abs/2508.16190'
     end
@@ -77,6 +81,10 @@ RSpec.describe Arxiv::Downloader::FeedParser do
   describe '#metadata for a paper with comment, doi, and journal_ref' do
     let(:xml)      { File.read 'spec/fixtures/http/atom-1207.7214.xml' }
     let(:metadata) { described_class.new(xml).metadata }
+
+    it 'extracts a later version' do
+      expect(metadata.version).to eq 2
+    end
 
     it 'extracts the comment' do
       expect(metadata.comment).to start_with '24 pages plus author list'

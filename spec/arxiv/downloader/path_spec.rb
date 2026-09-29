@@ -4,6 +4,7 @@ RSpec.describe Arxiv::Downloader::Path do
       let(:metadata) do
         Arxiv::Downloader::Metadata.new(
           arxiv_id:         '2508.16190',
+          version:          1,
           arxiv_url:        'https://arxiv.org/abs/2508.16190',
           pdf_url:          'https://arxiv.org/pdf/2508.16190.pdf',
           title:            'ComicScene154: A Scene Dataset for Comic Analysis',
@@ -33,6 +34,7 @@ RSpec.describe Arxiv::Downloader::Path do
       let(:metadata) do
         Arxiv::Downloader::Metadata.new(
           arxiv_id:         'cs/0002001',
+          version:          1,
           arxiv_url:        'https://arxiv.org/abs/cs/0002001',
           pdf_url:          'https://arxiv.org/pdf/cs/0002001.pdf',
           title:            'A Foundational Computer Science Paper',
@@ -58,6 +60,7 @@ RSpec.describe Arxiv::Downloader::Path do
       let(:metadata) do
         Arxiv::Downloader::Metadata.new(
           arxiv_id:         'math.GT/0312088',
+          version:          1,
           arxiv_url:        'https://arxiv.org/abs/math.GT/0312088',
           pdf_url:          'https://arxiv.org/pdf/math.GT/0312088.pdf',
           title:            'On Some Knot Invariant',
