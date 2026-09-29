@@ -138,6 +138,48 @@ RSpec.describe Arxiv::Downloader::CLI do
       end
     end
 
+    context 'with --input FILE' do
+      it 'downloads each ID listed in the file, skipping blanks and # comments' do
+        Dir.mktmpdir do |root|
+          status = described_class.new(['-p', root, '--rate-limit', '0', '--input', 'spec/fixtures/targets.txt'],
+                                       stdout: stdout, stderr: stderr).run
+
+          expect(status).to eq 0
+          expect(stderr.string).to be_empty
+          expect(stdout.string).to eq "#{File.join(root, expected_dir)}\n"
+        end
+      end
+
+      it 'combines file targets with argument targets' do
+        Dir.mktmpdir do |root|
+          described_class.new(['-p', root, '--rate-limit', '0', '-i', 'spec/fixtures/targets.txt', '2508.16190'],
+                              stdout: stdout, stderr: stderr).run
+
+          expect(stdout.string.lines.count).to eq 2
+        end
+      end
+
+      it 'exits non-zero when the file does not exist' do
+        status = described_class.new(['--input', 'spec/fixtures/missing.txt'], stdout: stdout, stderr: stderr).run
+
+        expect(status).to eq 1
+        expect(stderr.string).to include 'spec/fixtures/missing.txt'
+      end
+    end
+
+    context 'with --input -' do
+      it 'reads IDs from stdin' do
+        stdin = StringIO.new "2508.16190\n"
+
+        Dir.mktmpdir do |root|
+          described_class.new(['-p', root, '--rate-limit', '0', '--input', '-'],
+                              stdin: stdin, stdout: stdout, stderr: stderr).run
+
+          expect(stdout.string).to eq "#{File.join(root, expected_dir)}\n"
+        end
+      end
+    end
+
     context 'when some targets fail' do
       let(:missing_atom_url) { 'https://export.arxiv.org/api/query?id_list=1234.1234' }
       let(:failing_url)      { 'https://export.arxiv.org/api/query?id_list=1202.0819' }

@@ -14,6 +14,7 @@ Breaking: author affiliations. `Metadata#authors` is now a list of `Arxiv::Downl
 - Papers with no HTML version (404) skip the `html/` archive instead of saving arxiv's 404 page. A missing HTML asset (404) leaves its reference untouched instead of failing the paper.
 - Source downloads handle more than gzipped tarballs: a single gzipped file is written under its original name, a PDF-only submission's source is skipped (the PDF is already archived), and unrecognized formats are kept as raw bytes in `src/<id>`.
 - An ID arxiv has no paper for raises `Arxiv::Downloader::PaperNotFound` instead of `NoMethodError`.
+- CLI: `-i FILE` / `--input FILE` reads targets one per line (`-` for stdin; blank lines and `#` comments skipped), combined with any argument targets.
 - CLI: a failing target is reported on stderr as `<target>: <message>` and the remaining targets still download. Exit status is `1` if any target failed. Previously the first failure aborted the batch with a stack trace.
 - HTTP requests time out (10s connect, 10s write, 60s per read) instead of hanging forever on a stalled connection.
 - 429 and 503 responses are retried up to 3 times, waiting for `Retry-After` seconds when arxiv sends it, otherwise backing off 10s, 20s, 40s. Retries are logged with `-v`.

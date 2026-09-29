@@ -6,10 +6,11 @@ module Arxiv
       DEFAULT_DOWNLOAD_PATH = File.join Dir.home, 'Downloads', 'ArXiv_Papers'
       USAGE                 = 'Usage: arxiv-dl [options] <ARXIV_ID_OR_URL> [<ARXIV_ID_OR_URL>...]'.freeze
 
-      def initialize argv, stdout: $stdout, stderr: $stderr
+      def initialize argv, stderr: $stderr, stdin: $stdin, stdout: $stdout
         @argv   = argv
-        @stdout = stdout
         @stderr = stderr
+        @stdin  = stdin
+        @stdout = stdout
       end
 
       def run
@@ -35,12 +36,12 @@ module Arxiv
 
         begin
           parser.parse! @argv
-        rescue OptionParser::ParseError => e
+          options[:targets] = @argv + input_targets(options[:input])
+        rescue OptionParser::ParseError, SystemCallError => e
           @stderr.puts e.message
           return { exit_status: 1 }
         end
 
-        options[:targets] = @argv
         options[:path]       ||= ENV['ARXIV_DOWNLOAD_PATH'] || DEFAULT_DOWNLOAD_PATH
         options[:rate_limit] ||= (ENV['ARXIV_RATE_LIMIT'] || Client::DEFAULT_RATE_LIMIT).to_i
         options
@@ -49,6 +50,7 @@ module Arxiv
       def build_parser options
         OptionParser.new do |parser|
           parser.banner = USAGE
+          parser.on('-i FILE', '--input FILE')       { |value| options[:input] = value }
           parser.on('-p PATH', '--path PATH')        { |value| options[:path] = value }
           parser.on('--rate-limit SECONDS', Integer) { |value| options[:rate_limit] = value }
           parser.on('-v', '--verbose')               { options[:verbose] = true }
@@ -62,6 +64,14 @@ module Arxiv
             options[:exit_status] = 0
           end
         end
+      end
+
+      # one target per line from FILE, or stdin for "-"; blank lines and # comments skipped
+      def input_targets input
+        return [] if input.nil?
+
+        text = input == '-' ? @stdin.read : File.read(input)
+        text.lines.map(&:strip).reject { it.empty? || it.start_with?('#') }
       end
 
       def error_with message

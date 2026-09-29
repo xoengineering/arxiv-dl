@@ -42,14 +42,15 @@ Accepted input forms:
 
 ### Flags
 
-| Flag                     | Description                                              |
-| ------------------------ | -------------------------------------------------------- |
-| `-p PATH`, `--path PATH` | Root download directory                                  |
-| `--rate-limit SECONDS`   | Seconds between HTTP requests; `0` disables throttling   |
-| `-v`, `--verbose`        | Print step lines and per-request URL/byte logs to stdout |
-| `-q`, `--quiet`          | Print nothing to stdout; errors still go to stderr       |
-| `--version`              | Print the gem version and exit                           |
-| `-h`, `--help`           | Print help and exit                                      |
+| Flag                       | Description                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| `-i FILE`, `--input FILE`  | Read IDs/URLs from FILE, one per line (`-` for stdin; blanks and `#` skipped)  |
+| `-p PATH`, `--path PATH`   | Root download directory                                                        |
+| `--rate-limit SECONDS`     | Seconds between HTTP requests; `0` disables throttling                         |
+| `-v`, `--verbose`          | Print step lines and per-request URL/byte logs to stdout                       |
+| `-q`, `--quiet`            | Print nothing to stdout; errors still go to stderr                             |
+| `--version`                | Print the gem version and exit                                                 |
+| `-h`, `--help`             | Print help and exit                                                            |
 
 `-v` and `-q` are mutually exclusive.
 
@@ -84,6 +85,13 @@ Download multiple papers, verbose:
 
 ```sh
 arxiv-dl -v 2508.16190 1207.7214 cs/0002001
+```
+
+Download every paper listed in a file, or piped in:
+
+```sh
+arxiv-dl --input reading-list.txt
+cat reading-list.txt | arxiv-dl --input -
 ```
 
 Disable rate limiting (when running against a local mirror, etc):
