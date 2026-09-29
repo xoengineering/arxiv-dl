@@ -14,7 +14,9 @@ module Arxiv
       end
 
       def metadata
-        entry    = @feed.entries.first
+        entry = @feed.entries.first
+        raise PaperNotFound if entry.nil?
+
         arxiv_id = Identifier.new(entry.entry_id).id
 
         Metadata.new(

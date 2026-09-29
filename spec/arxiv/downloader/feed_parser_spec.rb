@@ -91,6 +91,15 @@ RSpec.describe Arxiv::Downloader::FeedParser do
     end
   end
 
+  describe '#metadata for an ID arxiv has no paper for' do
+    let(:xml) { File.read 'spec/fixtures/http/empty-feed-1234.1234.xml' }
+
+    it 'raises PaperNotFound' do
+      expect { described_class.new(xml).metadata }
+        .to raise_error Arxiv::Downloader::PaperNotFound, 'arxiv API returned no paper'
+    end
+  end
+
   describe '#metadata for a paper with author affiliations' do
     let(:xml)      { File.read 'spec/fixtures/http/atom-1202.0819.xml' }
     let(:metadata) { described_class.new(xml).metadata }

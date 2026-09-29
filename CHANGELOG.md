@@ -10,6 +10,7 @@ Breaking: author affiliations. `Metadata#authors` is now a list of `Arxiv::Downl
 - `Client#get` raises `Arxiv::Downloader::HTTPError` (with `status` and `url`) on non-success responses, instead of returning error bodies that were written to disk as PDFs/HTML or crashed the Atom parser.
 - Papers with no HTML version (404) skip the `html/` archive instead of saving arxiv's 404 page. A missing HTML asset (404) leaves its reference untouched instead of failing the paper.
 - Source downloads handle more than gzipped tarballs: a single gzipped file is written under its original name, a PDF-only submission's source is skipped (the PDF is already archived), and unrecognized formats are kept as raw bytes in `src/<id>`.
+- An ID arxiv has no paper for raises `Arxiv::Downloader::PaperNotFound` instead of `NoMethodError`.
 - Security: source tarball entries that resolve outside `src/` (`../` or absolute paths) are skipped instead of written.
 
 ## [0.1.1]

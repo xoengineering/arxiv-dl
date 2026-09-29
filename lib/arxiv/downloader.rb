@@ -6,7 +6,7 @@ require_relative 'downloader/bibtex'
 require_relative 'downloader/categories'
 require_relative 'downloader/cli'
 require_relative 'downloader/client'
-require_relative 'downloader/error'             # before http_error and identifier: they subclass Error
+require_relative 'downloader/error'             # before errors below that subclass Error
 require_relative 'downloader/feed_parser'
 require_relative 'downloader/html_archive'
 require_relative 'downloader/http_error'        # after error
@@ -16,6 +16,7 @@ require_relative 'downloader/metadata/bibtex'   # after metadata
 require_relative 'downloader/metadata/json'     # after metadata
 require_relative 'downloader/metadata/markdown' # after metadata
 require_relative 'downloader/metadata/yaml'     # after metadata
+require_relative 'downloader/paper_not_found'   # after error
 require_relative 'downloader/path'
 require_relative 'downloader/pdf'
 require_relative 'downloader/slug'
