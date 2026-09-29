@@ -5,6 +5,7 @@ module Arxiv
     class Client
       SOURCE_URL         = 'https://github.com/xoengineering/arxiv-dl'.freeze
       DEFAULT_RATE_LIMIT = 3
+      TIMEOUTS           = { connect: 10, read: 60, write: 10 }.freeze # seconds, per operation
 
       attr_reader :rate_limit
 
@@ -19,7 +20,7 @@ module Arxiv
 
       def get url
         throttle
-        response = HTTP.headers('User-Agent' => user_agent).follow.get(url)
+        response = HTTP.timeout(TIMEOUTS).headers('User-Agent' => user_agent).follow.get(url)
         @last_request_at = Time.now
         log_request url, response
         raise_unless_success url, response

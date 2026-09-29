@@ -38,6 +38,14 @@ RSpec.describe Arxiv::Downloader::Client do
       expect(client.get(url).to_s).to eq body
     end
 
+    it 'sets connect, read, and write timeouts so a stalled connection cannot hang forever' do
+      allow(HTTP).to receive(:timeout).and_call_original
+
+      client.get url
+
+      expect(HTTP).to have_received(:timeout).with(connect: 10, read: 60, write: 10)
+    end
+
     it 'sends the gem User-Agent header' do
       client.get url
 
