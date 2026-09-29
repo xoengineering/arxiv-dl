@@ -22,6 +22,7 @@ module Arxiv
           case object
           when Hash  then object.to_h { |key, value| [key.to_s, stringify(value)] }
           when Array then object.map { |item| stringify item }
+          when Data  then stringify object.to_h
           else object
           end
         end

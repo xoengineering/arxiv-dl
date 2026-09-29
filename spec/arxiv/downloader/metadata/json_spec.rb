@@ -8,7 +8,7 @@ RSpec.describe Arxiv::Downloader::Metadata::JSON do
       arxiv_url:        'https://arxiv.org/abs/2508.16190',
       pdf_url:          'https://arxiv.org/pdf/2508.16190.pdf',
       title:            'ComicScene154',
-      authors:          ['Sandro Paval'],
+      authors:          [Arxiv::Downloader::Author.new(name: 'Sandro Paval', affiliations: ['Example University'])],
       abstract:         'Brief.',
       published:        Date.new(2025, 8, 22),
       updated:          Date.new(2025, 8, 23),
@@ -35,7 +35,7 @@ RSpec.describe Arxiv::Downloader::Metadata::JSON do
 
         loaded = JSON.parse File.read(File.join(dir, 'metadata.json'))
         expect(loaded.fetch('arxiv_id')).to eq '2508.16190'
-        expect(loaded.fetch('authors')).to  eq ['Sandro Paval']
+        expect(loaded.fetch('authors')).to  eq [{ 'name' => 'Sandro Paval', 'affiliations' => ['Example University'] }]
       end
     end
 

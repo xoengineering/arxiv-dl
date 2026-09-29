@@ -7,7 +7,7 @@ RSpec.describe Arxiv::Downloader::Metadata::Bibtex do
       arxiv_url:        'https://arxiv.org/abs/2508.16190',
       pdf_url:          'https://arxiv.org/pdf/2508.16190.pdf',
       title:            'ComicScene154',
-      authors:          ['Sandro Paval'],
+      authors:          [Arxiv::Downloader::Author.new(name: 'Sandro Paval')],
       abstract:         'Brief.',
       published:        Date.new(2025, 8, 22),
       updated:          Date.new(2025, 8, 23),

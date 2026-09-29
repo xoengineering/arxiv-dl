@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/spkfOVUtzshbs6V0VhF77HBtQag</id>
+  <title>arXiv Query: search_query=&amp;id_list=1202.0819&amp;start=0&amp;max_results=10</title>
+  <updated>2026-07-22T19:30:11Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=&amp;start=0&amp;max_results=10&amp;id_list=1202.0819" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
+  <opensearch:totalResults>1</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/1202.0819v1</id>
+    <title>Laser frequency comb techniques for precise astronomical spectroscopy</title>
+    <updated>2012-02-03T21:00:00Z</updated>
+    <link href="https://arxiv.org/abs/1202.0819v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/1202.0819v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Precise astronomical spectroscopic analyses routinely assume that individual pixels in charge-coupled devices (CCDs) have uniform sensitivity to photons. Intra-pixel sensitivity (IPS) variations may already cause small systematic errors in, for example, studies of extra-solar planets via stellar radial velocities and cosmological variability in fundamental constants via quasar spectroscopy, but future experiments requiring velocity precisions approaching ~1 cm/s will be more strongly affected. Laser frequency combs have been shown to provide highly precise wavelength calibration for astronomical spectrographs, but here we show that they can also be used to measure IPS variations in astronomical CCDs in situ. We successfully tested a laser frequency comb system on the Ultra-High Resolution Facility spectrograph at the Anglo-Australian Telescope. By modelling the 2-dimensional comb signal recorded in a single CCD exposure, we find that the average IPS deviates by &lt;8 per cent if it is assumed to vary symmetrically about the pixel centre. We also demonstrate that series of comb exposures with absolutely known offsets between them can yield tighter constraints on symmetric IPS variations from ~100 pixels. We discuss measurement of asymmetric IPS variations and absolute wavelength calibration of astronomical spectrographs and CCDs using frequency combs.</summary>
+    <category term="astro-ph.IM" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="astro-ph.CO" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="astro-ph.EP" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2012-02-03T21:00:00Z</published>
+    <arxiv:comment>11 pages, 7 figures. Accepted for publication in MNRAS</arxiv:comment>
+    <arxiv:primary_category term="astro-ph.IM"/>
+    <author>
+      <name>Michael T. Murphy</name>
+      <arxiv:affiliation>Swinburne University of Technology</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Clayton R. Locke</name>
+      <arxiv:affiliation>University of Western Australia</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Philip S. Light</name>
+      <arxiv:affiliation>University of Western Australia</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Andre N. Luiten</name>
+      <arxiv:affiliation>University of Western Australia</arxiv:affiliation>
+    </author>
+    <author>
+      <name>Jon S. Lawrence</name>
+      <arxiv:affiliation>Australian Astronomical Observatory</arxiv:affiliation>
+      <arxiv:affiliation>Macquarie University</arxiv:affiliation>
+    </author>
+    <arxiv:doi>10.1111/j.1365-2966.2012.20656.x</arxiv:doi>
+    <link rel="related" href="https://doi.org/10.1111/j.1365-2966.2012.20656.x" title="doi"/>
+  </entry>
+</feed>

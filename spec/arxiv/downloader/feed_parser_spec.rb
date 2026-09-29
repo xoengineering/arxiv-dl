@@ -8,7 +8,11 @@ RSpec.describe Arxiv::Downloader::FeedParser do
     end
 
     it 'extracts all authors in order' do
-      expect(metadata.authors).to eq ['Sandro Paval', 'Ivan P. Yamshchikov', 'Pascal Meißner']
+      expect(metadata.authors.map(&:name)).to eq ['Sandro Paval', 'Ivan P. Yamshchikov', 'Pascal Meißner']
+    end
+
+    it 'returns empty affiliations when none are present' do
+      expect(metadata.authors.map(&:affiliations)).to all(eq [])
     end
 
     it 'extracts the abstract' do
@@ -84,6 +88,24 @@ RSpec.describe Arxiv::Downloader::FeedParser do
 
     it 'extracts the journal_ref' do
       expect(metadata.journal_ref).to eq 'Phys.Lett. B716 (2012) 1-29'
+    end
+  end
+
+  describe '#metadata for a paper with author affiliations' do
+    let(:xml)      { File.read 'spec/fixtures/http/atom-1202.0819.xml' }
+    let(:metadata) { described_class.new(xml).metadata }
+
+    it 'extracts an author affiliation' do
+      expect(metadata.authors.first).to eq Arxiv::Downloader::Author.new(
+        name:         'Michael T. Murphy',
+        affiliations: ['Swinburne University of Technology']
+      )
+    end
+
+    it 'extracts multiple affiliations for one author in order' do
+      lawrence = metadata.authors.find { it.name == 'Jon S. Lawrence' }
+
+      expect(lawrence.affiliations).to eq ['Australian Astronomical Observatory', 'Macquarie University']
     end
   end
 end

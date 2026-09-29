@@ -8,7 +8,10 @@ RSpec.describe Arxiv::Downloader::Metadata::YAML do
       arxiv_url:        'https://arxiv.org/abs/2508.16190',
       pdf_url:          'https://arxiv.org/pdf/2508.16190.pdf',
       title:            'ComicScene154',
-      authors:          ['Sandro Paval', 'Ivan P. Yamshchikov'],
+      authors:          [
+        Arxiv::Downloader::Author.new(name: 'Sandro Paval'),
+        Arxiv::Downloader::Author.new(name: 'Ivan P. Yamshchikov', affiliations: ['Example University'])
+      ],
       abstract:         "Two-line\nabstract.",
       published:        Date.new(2025, 8, 22),
       updated:          Date.new(2025, 8, 23),
@@ -36,7 +39,10 @@ RSpec.describe Arxiv::Downloader::Metadata::YAML do
         loaded = YAML.safe_load_file(File.join(dir, 'metadata.yaml'), permitted_classes: [Date])
         expect(loaded.fetch('arxiv_id')).to eq '2508.16190'
         expect(loaded.fetch('title')).to    eq 'ComicScene154'
-        expect(loaded.fetch('authors')).to  eq ['Sandro Paval', 'Ivan P. Yamshchikov']
+        expect(loaded.fetch('authors')).to  eq [
+          { 'name' => 'Sandro Paval',        'affiliations' => [] },
+          { 'name' => 'Ivan P. Yamshchikov', 'affiliations' => ['Example University'] }
+        ]
         expect(loaded.fetch('published')).to eq Date.new(2025, 8, 22)
       end
     end

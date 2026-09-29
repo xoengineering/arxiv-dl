@@ -6,7 +6,8 @@ module Arxiv
       class Author
         include SAXMachine
 
-        element :name
+        element  :name
+        elements 'arxiv:affiliation', as: :affiliations
       end
 
       class AtomEntry < Feedjira::Parser::AtomEntry
@@ -45,7 +46,7 @@ module Arxiv
           arxiv_url:        "https://arxiv.org/abs/#{arxiv_id}",
           pdf_url:          "https://arxiv.org/pdf/#{arxiv_id}.pdf",
           title:            entry.title,
-          authors:          entry.authors.map(&:name),
+          authors:          authors_of(entry),
           abstract:         entry.summary.strip,
           published:        entry.published.to_date,
           updated:          entry.updated.to_date,
@@ -55,6 +56,14 @@ module Arxiv
           doi:              entry.doi,
           journal_ref:      entry.journal_ref
         )
+      end
+
+      private
+
+      def authors_of entry
+        entry.authors.map do |author|
+          Downloader::Author.new name: author.name, affiliations: author.affiliations
+        end
       end
     end
   end

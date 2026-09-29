@@ -34,6 +34,7 @@ module Arxiv
           case object
           when Hash  then object.to_h { |key, value| [key.to_s, stringify(value)] }
           when Array then object.map { |item| stringify item }
+          when Data  then stringify object.to_h
           else object
           end
         end
@@ -57,7 +58,13 @@ module Arxiv
         end
 
         def authors_list
-          @metadata.authors.map { |author| "- #{author}" }.join "\n"
+          @metadata.authors.map { |author| "- #{author_line author}" }.join "\n"
+        end
+
+        def author_line author
+          return author.name if author.affiliations.empty?
+
+          "#{author.name} (#{author.affiliations.join '; '})"
         end
       end
     end

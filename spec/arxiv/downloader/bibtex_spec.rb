@@ -5,7 +5,11 @@ RSpec.describe Arxiv::Downloader::Bibtex do
       arxiv_url:        'https://arxiv.org/abs/2508.16190',
       pdf_url:          'https://arxiv.org/pdf/2508.16190.pdf',
       title:            'ComicScene154: A Scene Dataset for Comic Analysis',
-      authors:          ['Sandro Paval', 'Ivan P. Yamshchikov', 'Pascal Meißner'],
+      authors:          [
+        Arxiv::Downloader::Author.new(name: 'Sandro Paval', affiliations: ['Example University']),
+        Arxiv::Downloader::Author.new(name: 'Ivan P. Yamshchikov'),
+        Arxiv::Downloader::Author.new(name: 'Pascal Meißner')
+      ],
       abstract:         'Comics offer a compelling yet under-explored domain...',
       published:        Date.new(2025, 8, 22),
       updated:          Date.new(2025, 8, 22),

@@ -1,3 +1,12 @@
+## [Unreleased]
+
+Breaking: author affiliations. `Metadata#authors` is now a list of `Arxiv::Downloader::Author` (`name`, `affiliations`) instead of name strings.
+
+- Author affiliations (`arxiv:affiliation`) are parsed from the Atom feed.
+- `metadata.yaml`, `metadata.json`, and the `metadata.md` frontmatter write `authors` as a list of `{ name, affiliations }`.
+- The `metadata.md` body lists affiliations after each author name: `- Jon S. Lawrence (Australian Astronomical Observatory; Macquarie University)`.
+- BibTeX output is unchanged: names only.
+
 ## [0.1.1]
 
 Bug fix: the HTML archive step crashed with `NoMethodError` on papers whose HTML embeds `data:` URI images (e.g. arxiv's feedback-overlay mascot), and mis-fetched root-relative `/static/...` asset references from a wrong page-relative URL.

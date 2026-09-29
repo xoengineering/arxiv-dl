@@ -7,7 +7,11 @@ RSpec.describe Arxiv::Downloader::Metadata::Markdown do
       arxiv_url:        'https://arxiv.org/abs/2508.16190',
       pdf_url:          'https://arxiv.org/pdf/2508.16190.pdf',
       title:            'ComicScene154: A Scene Dataset for Comic Analysis',
-      authors:          ['Sandro Paval', 'Ivan P. Yamshchikov', 'Pascal Meißner'],
+      authors:          [
+        Arxiv::Downloader::Author.new(name: 'Sandro Paval'),
+        Arxiv::Downloader::Author.new(name: 'Ivan P. Yamshchikov', affiliations: ['Example University']),
+        Arxiv::Downloader::Author.new(name: 'Pascal Meißner', affiliations: ['Example Institute', 'Example Lab'])
+      ],
       abstract:         "Two lines\nof abstract.",
       published:        Date.new(2025, 8, 22),
       updated:          Date.new(2025, 8, 23),
@@ -59,9 +63,9 @@ RSpec.describe Arxiv::Downloader::Metadata::Markdown do
 
         body, = parsed File.join(dir, 'metadata.md')
         expect(body).to include '# ComicScene154: A Scene Dataset for Comic Analysis'
-        expect(body).to include '- Sandro Paval'
-        expect(body).to include '- Ivan P. Yamshchikov'
-        expect(body).to include '- Pascal Meißner'
+        expect(body).to include "- Sandro Paval\n"
+        expect(body).to include '- Ivan P. Yamshchikov (Example University)'
+        expect(body).to include '- Pascal Meißner (Example Institute; Example Lab)'
         expect(body).to include '2025-08-22'
         expect(body).to include 'cs.CL'
         expect(body).to include 'Computation and Language'

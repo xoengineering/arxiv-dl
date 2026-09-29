@@ -22,6 +22,7 @@ module Arxiv
           case object
           when Hash       then object.to_h { |key, value| [key.to_s, serialize(value)] }
           when Array      then object.map { |item| serialize item }
+          when Data       then serialize object.to_h
           when Date, Time then object.iso8601
           else object
           end

@@ -34,7 +34,7 @@ module Arxiv
       end
 
       def key
-        last_name  = @metadata.authors.first.split.last.downcase.gsub(/[^a-z]/, '')
+        last_name  = @metadata.authors.first.name.split.last.downcase.gsub(/[^a-z]/, '')
         year       = @metadata.published.year
         title_word = Slug.new(@metadata.title).to_s.split('-').first
 
@@ -48,7 +48,7 @@ module Arxiv
       end
 
       def authors
-        @metadata.authors.join ' and '
+        @metadata.authors.map(&:name).join ' and '
       end
     end
   end
