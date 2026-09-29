@@ -16,12 +16,12 @@ RSpec.describe Arxiv::Downloader::HTMLArchive do
 
   before do
     stub_request(:get, html_url).to_return(status: 200, body: html_fixture)
-    stub_request(:get, x1_url).to_return(status: 200, body: png_fixture)
-    stub_request(:get, x2_url).to_return(status: 200, body: png_fixture)
-    stub_request(:get, css_url).to_return(status: 200, body: 'body{}')
-    stub_request(:get, js_url).to_return(status: 200, body: 'function overlay(){}')
-    stub_request(:get, cdn_css).to_return(status: 200, body: '.btn{}')
-    stub_request(:get, cdn_js).to_return(status: 200, body: 'function noop(){}')
+    stub_request(:get, x1_url).to_return(status:   200, body: png_fixture)
+    stub_request(:get, x2_url).to_return(status:   200, body: png_fixture)
+    stub_request(:get, css_url).to_return(status:  200, body: 'body{}')
+    stub_request(:get, js_url).to_return(status:   200, body: 'function overlay(){}')
+    stub_request(:get, cdn_css).to_return(status:  200, body: '.btn{}')
+    stub_request(:get, cdn_js).to_return(status:   200, body: 'function noop(){}')
   end
 
   describe '#download' do
@@ -75,9 +75,23 @@ RSpec.describe Arxiv::Downloader::HTMLArchive do
         cache    = Arxiv::Downloader::AssetsCache.new root: root, client: client
         described_class.new(identifier, client: client, assets_cache: cache).download to: html_dir
 
-        bootstrap = File.join root, '_shared', 'cdn.jsdelivr.net', 'npm', 'bootstrap@5.3.0', 'dist', 'css',
+        bootstrap = File.join root,
+                              '_shared',
+                              'cdn.jsdelivr.net',
+                              'npm',
+                              'bootstrap@5.3.0',
+                              'dist',
+                              'css',
                               'bootstrap.min.css'
-        html2     = File.join root, '_shared', 'cdn.jsdelivr.net', 'npm', 'html2canvas@1.4.1', 'dist', 'html2canvas.min.js'
+
+        html2     = File.join root,
+                              '_shared',
+                              'cdn.jsdelivr.net',
+                              'npm',
+                              'html2canvas@1.4.1',
+                              'dist',
+                              'html2canvas.min.js'
+
         expect(File).to exist bootstrap
         expect(File).to exist html2
       end
