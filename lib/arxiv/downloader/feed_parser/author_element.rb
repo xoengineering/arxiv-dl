@@ -1,7 +1,7 @@
 module Arxiv
   module Downloader
     class FeedParser
-      class Author
+      class AuthorElement
         include SAXMachine
 
         element  :name

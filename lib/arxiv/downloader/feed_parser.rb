@@ -1,5 +1,5 @@
 require 'feedjira'
-require_relative 'feed_parser/author'
+require_relative 'feed_parser/author_element'
 require_relative 'feed_parser/atom_entry'
 require_relative 'feed_parser/atom_feed'
 
@@ -38,7 +38,7 @@ module Arxiv
 
       def authors_of entry
         entry.authors.map do |author|
-          Downloader::Author.new name: author.name, affiliations: author.affiliations
+          Author.new name: author.name, affiliations: author.affiliations
         end
       end
     end
