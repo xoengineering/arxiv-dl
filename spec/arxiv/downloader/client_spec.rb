@@ -53,13 +53,13 @@ RSpec.describe Arxiv::Downloader::Client do
     end
 
     context 'when arxiv responds with a non-success status' do
-      before { stub_request(:get, url).to_return(status: 429, body: 'Rate exceeded.') }
+      before { stub_request(:get, url).to_return(status: 404) }
 
       it 'raises HTTPError with the status and URL' do
         expect { client.get url }.to raise_error(Arxiv::Downloader::HTTPError) { |error|
-          expect(error.status).to  eq 429
+          expect(error.status).to  eq 404
           expect(error.url).to     eq url
-          expect(error.message).to eq "GET #{url} failed: 429 Too Many Requests"
+          expect(error.message).to eq "GET #{url} failed: 404 Not Found"
         }
       end
 

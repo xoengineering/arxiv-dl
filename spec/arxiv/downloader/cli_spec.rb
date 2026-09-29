@@ -140,12 +140,12 @@ RSpec.describe Arxiv::Downloader::CLI do
 
     context 'when some targets fail' do
       let(:missing_atom_url) { 'https://export.arxiv.org/api/query?id_list=1234.1234' }
-      let(:throttled_url)    { 'https://export.arxiv.org/api/query?id_list=1202.0819' }
+      let(:failing_url)      { 'https://export.arxiv.org/api/query?id_list=1202.0819' }
 
       before do
         stub_request(:get, missing_atom_url)
           .to_return(status: 200, body: File.read('spec/fixtures/http/empty-feed-1234.1234.xml'))
-        stub_request(:get, throttled_url).to_return(status: 429, body: 'Rate exceeded.')
+        stub_request(:get, failing_url).to_return(status: 500)
       end
 
       def run_with targets, root
@@ -167,7 +167,7 @@ RSpec.describe Arxiv::Downloader::CLI do
           expect(stderr.string.lines).to eq [
             "not-an-id: not a recognizable arXiv identifier: not-an-id\n",
             "1234.1234: arxiv API returned no paper\n",
-            "1202.0819: GET #{throttled_url} failed: 429 Too Many Requests\n"
+            "1202.0819: GET #{failing_url} failed: 500 Internal Server Error\n"
           ]
         end
       end

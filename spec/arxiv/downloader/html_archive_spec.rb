@@ -145,7 +145,7 @@ RSpec.describe Arxiv::Downloader::HTMLArchive do
     end
 
     context 'when the HTML page fails with another status' do
-      before { stub_request(:get, html_url).to_return(status: 503) }
+      before { stub_request(:get, html_url).to_return(status: 500) }
 
       it 'raises HTTPError' do
         Dir.mktmpdir do |root|
