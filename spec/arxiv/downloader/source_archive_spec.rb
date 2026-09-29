@@ -64,6 +64,21 @@ RSpec.describe Arxiv::Downloader::SourceArchive do
       end
     end
 
+    context 'when the tarball has entries that escape the target directory' do
+      let(:fixture) { File.binread 'spec/fixtures/http/src-path-traversal.tar.gz' }
+
+      it 'skips the escaping entries and extracts the rest' do
+        Dir.mktmpdir do |dir|
+          target = File.join dir, 'paper', 'src'
+          described_class.new(identifier, client: client).download to: target
+
+          expect(File).to     exist File.join(target, 'main.tex')
+          expect(File).not_to exist File.join(dir, 'paper', 'escaped.txt')
+          expect(File).not_to exist File.join(dir, 'paper', 'escaped-nested.txt')
+        end
+      end
+    end
+
     context 'when the source is a single gzipped file' do
       let(:fixture) { File.binread 'spec/fixtures/http/src-single-file.gz' }
 

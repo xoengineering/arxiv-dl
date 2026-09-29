@@ -56,7 +56,8 @@ module Arxiv
       end
 
       def extract entry, root
-        path = File.join root, entry.full_name
+        path = File.expand_path entry.full_name, root
+        return unless inside? path, root
 
         if entry.directory?
           FileUtils.mkdir_p path
@@ -64,6 +65,11 @@ module Arxiv
           FileUtils.mkdir_p File.dirname(path)
           File.binwrite path, entry.read
         end
+      end
+
+      # guards against tar entries like ../escaped.txt or /etc/passwd
+      def inside? path, root
+        path.start_with? File.join(File.expand_path(root), '')
       end
     end
   end
