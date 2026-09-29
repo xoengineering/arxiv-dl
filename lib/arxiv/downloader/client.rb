@@ -7,7 +7,7 @@ module Arxiv
       DEFAULT_RATE_LIMIT = 3
       TIMEOUTS           = { connect: 10, read: 60, write: 10 }.freeze # seconds, per operation
       MAX_RETRIES        = 3
-      RETRY_BACKOFF      = 10 # seconds before the first retry; doubles on each retry
+      RETRY_BACKOFF      = 10 # seconds before the first retry. doubles on each retry.
       RETRYABLE_STATUSES = [429, 503].freeze
 
       attr_reader :rate_limit
@@ -54,11 +54,11 @@ module Arxiv
 
       def wait_before_retry response, retries
         seconds = retry_after(response) || (RETRY_BACKOFF * (2**(retries - 1)))
-        @log&.puts "==> #{response.status}; retrying in #{seconds}s"
+        @log&.puts "==> #{response.status}. Retrying in #{seconds}s"
         sleep seconds
       end
 
-      # Retry-After in delay-seconds form; the HTTP-date form falls back to backoff
+      # Retry-After in delay-seconds form. The HTTP-date form falls back to backoff.
       def retry_after response
         value = response.headers['Retry-After']
         return if value.nil?

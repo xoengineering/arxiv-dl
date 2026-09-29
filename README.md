@@ -42,15 +42,15 @@ Accepted input forms:
 
 ### Flags
 
-| Flag                       | Description                                                                    |
-| -------------------------- | ------------------------------------------------------------------------------ |
-| `-i FILE`, `--input FILE`  | Read IDs/URLs from FILE, one per line (`-` for stdin; blanks and `#` skipped)  |
-| `-p PATH`, `--path PATH`   | Root download directory                                                        |
-| `--rate-limit SECONDS`     | Seconds between HTTP requests; `0` disables throttling                         |
-| `-v`, `--verbose`          | Print step lines and per-request URL/byte logs to stdout                       |
-| `-q`, `--quiet`            | Print nothing to stdout; errors still go to stderr                             |
-| `--version`                | Print the gem version and exit                                                 |
-| `-h`, `--help`             | Print help and exit                                                            |
+| Flag                      | Description                                                                   |
+| ------------------------- | ----------------------------------------------------------------------------- |
+| `-i FILE`, `--input FILE` | Read IDs/URLs from FILE, one per line (`-` for stdin. blanks and `#` skipped) |
+| `-p PATH`, `--path PATH`  | Root download directory                                                       |
+| `--rate-limit SECONDS`    | Seconds between HTTP requests. `0` disables throttling                        |
+| `-v`, `--verbose`         | Print step lines and per-request URL/byte logs to stdout                      |
+| `-q`, `--quiet`           | Print nothing to stdout. errors still go to stderr                            |
+| `--version`               | Print the gem version and exit                                                |
+| `-h`, `--help`            | Print help and exit                                                           |
 
 `-v` and `-q` are mutually exclusive.
 
@@ -59,7 +59,7 @@ Accepted input forms:
 | Variable              | Effect                                                                          |
 | --------------------- | ------------------------------------------------------------------------------- |
 | `ARXIV_DOWNLOAD_PATH` | Root download directory (default: `$HOME/Downloads/ArXiv_Papers`)               |
-| `ARXIV_RATE_LIMIT`    | Seconds between HTTP requests (default: `3`, per arxiv etiquette; `0` disables) |
+| `ARXIV_RATE_LIMIT`    | Seconds between HTTP requests (default: `3`, per arxiv etiquette. `0` disables) |
 
 Precedence: CLI flag > ENV var > default.
 
@@ -122,7 +122,7 @@ $ARXIV_DOWNLOAD_PATH/                   # default: $HOME/Downloads/ArXiv_Papers
         *.tex, *.bbl, ...               # extracted from /src/<id>v<N>
 ```
 
-An unversioned ID (`2508.16190`) archives the latest version; a versioned ID (`2508.16190v1`) archives that version. Different versions of the same paper sit side by side under the same paper folder.
+An unversioned ID (`2508.16190`) archives the latest version. A versioned ID (`2508.16190v1`) archives that version. Different versions of the same paper sit side by side under the same paper folder.
 
 Each version downloads into `v<N>.partial/` and is renamed to `v<N>/` only when every file succeeded. Re-running skips versions whose `v<N>/` already exists and retries interrupted ones from scratch.
 

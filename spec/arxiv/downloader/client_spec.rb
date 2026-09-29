@@ -114,7 +114,7 @@ RSpec.describe Arxiv::Downloader::Client do
 
         client.get url
 
-        expect(log.string).to include '==> 429 Too Many Requests; retrying in 10s'
+        expect(log.string).to include '==> 429 Too Many Requests. Retrying in 10s'
       end
 
       it 'does not retry other failures' do

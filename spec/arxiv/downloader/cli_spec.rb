@@ -132,7 +132,7 @@ RSpec.describe Arxiv::Downloader::CLI do
           described_class.new(['-p', root, '--rate-limit', '0', '2508.16190', '2508.16190'], stdout: stdout,
                                                                                              stderr: stderr).run
 
-          # Both targets land at the same path; output line is printed twice
+          # Both targets land at the same path. Output line is printed twice.
           expect(stdout.string.lines.count).to eq 2
         end
       end

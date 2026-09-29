@@ -12,6 +12,6 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  # Specs tagged :live hit the real arxiv API; run them with ARXIV_LIVE=1
+  # Specs tagged :live hit the real arxiv API. Run them with: ARXIV_LIVE=1
   config.filter_run_excluding :live unless ENV['ARXIV_LIVE']
 end
