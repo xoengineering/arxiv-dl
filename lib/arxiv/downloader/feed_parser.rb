@@ -1,7 +1,7 @@
-require 'feedjira'
-require_relative 'feed_parser/author_element'
-require_relative 'feed_parser/atom_entry'
-require_relative 'feed_parser/atom_feed'
+require 'feedjira'                            # before all: SAXMachine, Feedjira::Parser::AtomEntry
+require_relative 'feed_parser/author_element' # before atom_entry: AtomEntry uses class: AuthorElement
+require_relative 'feed_parser/atom_entry'     # before atom_feed: AtomFeed uses class: AtomEntry
+require_relative 'feed_parser/atom_feed'      # after atom_entry
 
 module Arxiv
   module Downloader
