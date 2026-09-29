@@ -112,6 +112,44 @@ RSpec.describe Arxiv::Downloader::Archive do
       end
     end
 
+    context 'when the version is already archived' do
+      it 'skips the downloads and returns the existing folder' do
+        Dir.mktmpdir do |root|
+          described_class.new(identifier, root: root, client: client).run
+          path = described_class.new(identifier, root: root, client: client).run
+
+          expect(path).to eq File.join(root, expected_dir)
+          expect(WebMock).to have_requested(:get, pdf_url).once
+        end
+      end
+    end
+
+    context 'when a download fails partway' do
+      let(:src_body) { File.binread 'spec/fixtures/http/src-fixture.tar.gz' }
+
+      before { stub_request(:get, src_url).to_return({ status: 500 }, { status: 200, body: src_body }) }
+
+      it 'leaves no v<N>/ folder, so the version is not mistaken for archived' do
+        Dir.mktmpdir do |root|
+          archive = described_class.new(identifier, root: root, client: client)
+
+          expect { archive.run }.to raise_error Arxiv::Downloader::HTTPError
+          expect(File).not_to exist File.join(root, expected_dir)
+        end
+      end
+
+      it 'completes on the next run' do
+        Dir.mktmpdir do |root|
+          expect { described_class.new(identifier, root: root, client: client).run }
+            .to raise_error Arxiv::Downloader::HTTPError
+          described_class.new(identifier, root: root, client: client).run
+
+          expect(File).to     exist File.join(root, expected_dir, 'src', 'main.tex')
+          expect(File).not_to exist File.join(root, "#{expected_dir}.partial")
+        end
+      end
+    end
+
     context 'with a versioned identifier' do
       let(:identifier) { Arxiv::Downloader::Identifier.new '2508.16190v1' }
       let(:atom_url)   { 'https://export.arxiv.org/api/query?id_list=2508.16190v1' }

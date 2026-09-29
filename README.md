@@ -116,6 +116,8 @@ $ARXIV_DOWNLOAD_PATH/                   # default: $HOME/Downloads/ArXiv_Papers
 
 An unversioned ID (`2508.16190`) archives the latest version; a versioned ID (`2508.16190v1`) archives that version. Different versions of the same paper sit side by side under the same paper folder.
 
+Each version downloads into `v<N>.partial/` and is renamed to `v<N>/` only when every file succeeded. Re-running skips versions whose `v<N>/` already exists and retries interrupted ones from scratch.
+
 `YYYY/MM/DD` is the original submission date. `<primary_category>` is from the paper's metadata (`cs.CL`, `math.NT`, etc). `<slug>` is derived from the paper title (Unicode → ASCII, hyphenated, truncated to 80 chars at a word boundary).
 
 For legacy IDs containing `/` (e.g. `cs/0002001`), the slash is replaced with `-` in the directory name and file names (`cs-0002001-.../v1/cs-0002001v1.pdf`).

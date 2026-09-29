@@ -8,6 +8,7 @@ Breaking: author affiliations. `Metadata#authors` is now a list of `Arxiv::Downl
 - BibTeX output is unchanged: names only.
 - `Metadata#version` records which paper version was archived; the sidecars include it as `version`.
 - Breaking: versioned layout. Each archived version goes in its own `v<N>/` folder under the paper folder, with versioned filenames (`2508.16190v1.pdf`, `2508.16190v1-abstract.html`, `html/2508.16190v1.html`). A versioned ID (`2508.16190v1`) now archives that version instead of silently downloading the latest; an unversioned ID archives the latest.
+- Re-running skips versions already archived. Each version downloads into `v<N>.partial/` and is renamed to `v<N>/` only when complete, so a failed run never leaves a folder that looks finished.
 - Minimum Ruby version is now 4.0.7.
 - `Client#get` raises `Arxiv::Downloader::HTTPError` (with `status` and `url`) on non-success responses, instead of returning error bodies that were written to disk as PDFs/HTML or crashed the Atom parser.
 - Papers with no HTML version (404) skip the `html/` archive instead of saving arxiv's 404 page. A missing HTML asset (404) leaves its reference untouched instead of failing the paper.

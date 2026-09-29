@@ -9,8 +9,13 @@ module Arxiv
         @client     = client
       end
 
+      # Downloads into v<N>.partial/ and renames it to v<N>/ only once everything
+      # succeeded, so an existing v<N>/ is always complete and is skipped.
       def run
-        FileUtils.mkdir_p paper_dir
+        return paper_dir if Dir.exist? paper_dir
+
+        FileUtils.rm_rf staging_dir
+        FileUtils.mkdir_p staging_dir
 
         download_pdf
         download_abstract
@@ -18,6 +23,7 @@ module Arxiv
         download_source_archive
         write_sidecars
 
+        File.rename staging_dir, paper_dir
         paper_dir
       end
 
@@ -41,22 +47,27 @@ module Arxiv
         @paper_dir ||= File.join @root, Path.new(metadata).to_s, "v#{metadata.version}"
       end
 
+      # a sibling of paper_dir, so relative ../_shared/ refs survive the rename
+      def staging_dir
+        "#{paper_dir}.partial"
+      end
+
       def download_pdf
-        PDF.new(archived, client: @client).download to: File.join(paper_dir, "#{archived.file_stem}.pdf")
+        PDF.new(archived, client: @client).download to: File.join(staging_dir, "#{archived.file_stem}.pdf")
       end
 
       def download_abstract
         AbstractPage.new(archived, client: @client)
-                    .download to: File.join(paper_dir, "#{archived.file_stem}-abstract.html")
+                    .download to: File.join(staging_dir, "#{archived.file_stem}-abstract.html")
       end
 
       def download_html_archive
         HTMLArchive.new(archived, client: @client, assets_cache: assets_cache)
-                   .download to: File.join(paper_dir, 'html')
+                   .download to: File.join(staging_dir, 'html')
       end
 
       def download_source_archive
-        SourceArchive.new(archived, client: @client).download to: File.join(paper_dir, 'src')
+        SourceArchive.new(archived, client: @client).download to: File.join(staging_dir, 'src')
       end
 
       def assets_cache
@@ -64,10 +75,10 @@ module Arxiv
       end
 
       def write_sidecars
-        Metadata::Markdown.new(metadata).write to: paper_dir
-        Metadata::YAML.new(metadata).write     to: paper_dir
-        Metadata::JSON.new(metadata).write     to: paper_dir
-        Metadata::Bibtex.new(metadata, client: @client).write to: paper_dir
+        Metadata::Markdown.new(metadata).write to: staging_dir
+        Metadata::YAML.new(metadata).write     to: staging_dir
+        Metadata::JSON.new(metadata).write     to: staging_dir
+        Metadata::Bibtex.new(metadata, client: @client).write to: staging_dir
       end
     end
   end
