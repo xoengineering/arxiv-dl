@@ -143,7 +143,7 @@ RSpec.describe Arxiv::Downloader::Client do
         client.get url
 
         expect(client).to have_received(:sleep) do |seconds|
-          expect(seconds).to be > 0
+          expect(seconds).to be_positive
           expect(seconds).to be <= 3
         end
       end
