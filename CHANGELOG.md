@@ -1,4 +1,6 @@
-## [Unreleased]
+## [0.3.0]
+
+Less folder nesting for the common case: most papers only ever have one version.
 
 ### Breaking
 
