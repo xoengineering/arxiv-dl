@@ -16,6 +16,9 @@ module Arxiv
       # the API/URL form: 2508.16190, or 2508.16190v2 when a version is known
       def to_s = version.nil? ? id : "#{id}v#{version}"
 
+      # to_s as a single path segment: legacy IDs like cs/0002001 become cs-0002001
+      def file_stem = to_s.tr('/', '-')
+
       private
 
       # validations

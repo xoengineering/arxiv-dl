@@ -118,7 +118,7 @@ An unversioned ID (`2508.16190`) archives the latest version; a versioned ID (`2
 
 `YYYY/MM/DD` is the original submission date. `<primary_category>` is from the paper's metadata (`cs.CL`, `math.NT`, etc). `<slug>` is derived from the paper title (Unicode → ASCII, hyphenated, truncated to 80 chars at a word boundary).
 
-For legacy IDs containing `/` (e.g. `cs/0002001`), the slash is replaced with `-` in the directory name (`cs-0002001-...`).
+For legacy IDs containing `/` (e.g. `cs/0002001`), the slash is replaced with `-` in the directory name and file names (`cs-0002001-.../v1/cs-0002001v1.pdf`).
 
 ## Library usage
 

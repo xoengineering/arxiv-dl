@@ -25,7 +25,7 @@ module Arxiv
         return extract_gzip body, to if body.start_with? GZIP_MAGIC
 
         # unrecognized format: keep the raw bytes rather than lose them
-        File.binwrite File.join(to, @identifier.to_s), body
+        File.binwrite File.join(to, @identifier.file_stem), body
       end
 
       private
@@ -36,7 +36,7 @@ module Arxiv
           contents = gz.read
           next extract_tar contents, to if tar? contents
 
-          filename = File.basename(gz.orig_name || @identifier.to_s)
+          filename = File.basename(gz.orig_name || @identifier.file_stem)
           File.binwrite File.join(to, filename), contents
         end
       end

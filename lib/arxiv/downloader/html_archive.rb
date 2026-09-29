@@ -28,7 +28,7 @@ module Arxiv
           document.css(selector).each { |node| process node, attribute, to }
         end
 
-        File.write File.join(to, "#{@identifier}.html"), document.to_html
+        File.write File.join(to, "#{@identifier.file_stem}.html"), document.to_html
       end
 
       private

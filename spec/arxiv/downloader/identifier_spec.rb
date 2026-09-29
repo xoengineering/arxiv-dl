@@ -690,4 +690,14 @@ RSpec.describe Arxiv::Downloader::Identifier do
       expect(described_class.new('cs/0002001v1').to_s).to eq 'cs/0002001v1'
     end
   end
+
+  describe '#file_stem' do
+    it 'is the same as to_s for modern IDs' do
+      expect(described_class.new('2508.16190v1').file_stem).to eq '2508.16190v1'
+    end
+
+    it 'replaces the legacy / with - so it is a single path segment' do
+      expect(described_class.new('cs/0002001v1').file_stem).to eq 'cs-0002001v1'
+    end
+  end
 end

@@ -129,6 +129,20 @@ RSpec.describe Arxiv::Downloader::SourceArchive do
           expect(File.binread(File.join(target, '2508.16190'))).to eq 'plain bytes'
         end
       end
+
+      context 'with a legacy identifier' do
+        let(:identifier) { Arxiv::Downloader::Identifier.new 'cs/0002001v1' }
+        let(:url)        { 'https://arxiv.org/src/cs/0002001v1' }
+
+        it 'names the file without the legacy /' do
+          Dir.mktmpdir do |dir|
+            target = File.join dir, 'src'
+            described_class.new(identifier, client: client).download to: target
+
+            expect(File.binread(File.join(target, 'cs-0002001v1'))).to eq 'plain bytes'
+          end
+        end
+      end
     end
   end
 end

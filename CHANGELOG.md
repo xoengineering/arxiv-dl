@@ -16,6 +16,7 @@ Breaking: author affiliations. `Metadata#authors` is now a list of `Arxiv::Downl
 - CLI: a failing target is reported on stderr as `<target>: <message>` and the remaining targets still download. Exit status is `1` if any target failed. Previously the first failure aborted the batch with a stack trace.
 - HTTP requests time out (10s connect, 10s write, 60s per read) instead of hanging forever on a stalled connection.
 - 429 and 503 responses are retried up to 3 times, waiting for `Retry-After` seconds when arxiv sends it, otherwise backing off 10s, 20s, 40s. Retries are logged with `-v`.
+- Legacy IDs (`cs/0002001`) no longer fail to write files: the `/` is replaced with `-` in file names, as it already was in the paper folder name.
 - Security: source tarball entries that resolve outside `src/` (`../` or absolute paths) are skipped instead of written.
 
 ## [0.1.1]

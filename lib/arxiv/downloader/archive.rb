@@ -42,12 +42,12 @@ module Arxiv
       end
 
       def download_pdf
-        PDF.new(archived, client: @client).download to: File.join(paper_dir, "#{archived}.pdf")
+        PDF.new(archived, client: @client).download to: File.join(paper_dir, "#{archived.file_stem}.pdf")
       end
 
       def download_abstract
         AbstractPage.new(archived, client: @client)
-                    .download to: File.join(paper_dir, "#{archived}-abstract.html")
+                    .download to: File.join(paper_dir, "#{archived.file_stem}-abstract.html")
       end
 
       def download_html_archive
