@@ -6,6 +6,9 @@ module Arxiv
       SOURCE_URL         = 'https://github.com/xoengineering/arxiv-dl'.freeze
       DEFAULT_RATE_LIMIT = 3
       TIMEOUTS           = { connect: 10, read: 60, write: 10 }.freeze # seconds, per operation
+      MAX_RETRIES        = 3
+      RETRY_BACKOFF      = 10 # seconds before the first retry; doubles on each retry
+      RETRYABLE_STATUSES = [429, 503].freeze
 
       attr_reader :rate_limit
 
@@ -19,20 +22,48 @@ module Arxiv
       end
 
       def get url
-        throttle
-        response = HTTP.timeout(TIMEOUTS).headers('User-Agent' => user_agent).follow.get(url)
-        @last_request_at = Time.now
-        log_request url, response
-        raise_unless_success url, response
-        response
+        retries = 0
+
+        loop do
+          response = request url
+          return response if response.status.success?
+          raise http_error(url, response) unless retryable? response, retries
+
+          retries += 1
+          wait_before_retry response, retries
+        end
       end
 
       private
 
-      def raise_unless_success url, response
-        return if response.status.success?
+      def request url
+        throttle
+        response = HTTP.timeout(TIMEOUTS).headers('User-Agent' => user_agent).follow.get(url)
+        @last_request_at = Time.now
+        log_request url, response
+        response
+      end
 
-        raise HTTPError.new(status: response.status.code, url: url, reason: response.status.reason)
+      def http_error url, response
+        HTTPError.new status: response.status.code, url: url, reason: response.status.reason
+      end
+
+      def retryable? response, retries
+        RETRYABLE_STATUSES.include?(response.status.code) && retries < MAX_RETRIES
+      end
+
+      def wait_before_retry response, retries
+        seconds = retry_after(response) || (RETRY_BACKOFF * (2**(retries - 1)))
+        @log&.puts "==> #{response.status}; retrying in #{seconds}s"
+        sleep seconds
+      end
+
+      # Retry-After in delay-seconds form; the HTTP-date form falls back to backoff
+      def retry_after response
+        value = response.headers['Retry-After']
+        return if value.nil?
+
+        Integer(value, exception: false)
       end
 
       def log_request url, response

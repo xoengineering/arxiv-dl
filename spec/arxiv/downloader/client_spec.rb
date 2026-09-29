@@ -71,6 +71,60 @@ RSpec.describe Arxiv::Downloader::Client do
       end
     end
 
+    context 'when arxiv is throttling (429) or unavailable (503)' do
+      before { allow(client).to receive(:sleep) }
+
+      it 'retries after a backoff and returns the eventual success' do
+        stub_request(:get, url).to_return({ status: 429 }, { status: 200, body: body })
+
+        expect(client.get(url).to_s).to eq body
+        expect(client).to have_received(:sleep).with(10).once
+      end
+
+      it 'doubles the backoff on each retry' do
+        stub_request(:get, url).to_return({ status: 503 }, { status: 503 }, { status: 503 }, { status: 200, body: body })
+
+        client.get url
+
+        expect(client).to have_received(:sleep).with(10).ordered
+        expect(client).to have_received(:sleep).with(20).ordered
+        expect(client).to have_received(:sleep).with(40).ordered
+      end
+
+      it 'waits for Retry-After seconds when arxiv sends it' do
+        stub_request(:get, url).to_return({ status: 503, headers: { 'Retry-After' => '7' } }, { status: 200, body: body })
+
+        client.get url
+
+        expect(client).to have_received(:sleep).with(7).once
+      end
+
+      it 'gives up with HTTPError after 3 retries' do
+        stub_request(:get, url).to_return(status: 429)
+
+        expect { client.get url }.to raise_error(Arxiv::Downloader::HTTPError) { expect(it.status).to eq 429 }
+        expect(WebMock).to have_requested(:get, url).times(4)
+      end
+
+      it 'logs each retry' do
+        log    = StringIO.new
+        client = described_class.new(rate_limit: 0, log: log)
+        allow(client).to receive(:sleep)
+        stub_request(:get, url).to_return({ status: 429 }, { status: 200, body: body })
+
+        client.get url
+
+        expect(log.string).to include '==> 429 Too Many Requests; retrying in 10s'
+      end
+
+      it 'does not retry other failures' do
+        stub_request(:get, url).to_return(status: 500)
+
+        expect { client.get url }.to raise_error Arxiv::Downloader::HTTPError
+        expect(WebMock).to have_requested(:get, url).once
+      end
+    end
+
     context 'with rate-limiting enabled' do
       let(:client) { described_class.new(rate_limit: 3) }
 
