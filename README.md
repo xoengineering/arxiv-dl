@@ -132,6 +132,12 @@ script/test     # run specs and rubocop
 script/console  # interactive prompt
 ```
 
+Specs run offline against recorded fixtures in `spec/fixtures/http/`. To check those fixtures against the live arxiv API, run:
+
+```sh
+ARXIV_LIVE=1 script/test
+```
+
 ## License
 
 MIT — see [LICENSE.md](LICENSE.md).
