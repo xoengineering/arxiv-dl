@@ -129,5 +129,63 @@ RSpec.describe Arxiv::Downloader::HTMLArchive do
         expect(File).to exist File.join(html_dir, '2508.16190.html')
       end
     end
+
+    context 'when the paper has no HTML version' do
+      before { stub_request(:get, html_url).to_return(status: 404) }
+
+      it 'writes nothing and does not create the target directory' do
+        Dir.mktmpdir do |root|
+          html_dir = File.join root, 'html'
+          cache    = Arxiv::Downloader::AssetsCache.new root: root, client: client
+          described_class.new(identifier, client: client, assets_cache: cache).download to: html_dir
+
+          expect(File).not_to exist html_dir
+        end
+      end
+    end
+
+    context 'when the HTML page fails with another status' do
+      before { stub_request(:get, html_url).to_return(status: 503) }
+
+      it 'raises HTTPError' do
+        Dir.mktmpdir do |root|
+          cache   = Arxiv::Downloader::AssetsCache.new root: root, client: client
+          archive = described_class.new(identifier, client: client, assets_cache: cache)
+
+          expect { archive.download to: File.join(root, 'html') }.to raise_error Arxiv::Downloader::HTTPError
+        end
+      end
+    end
+
+    context 'when a page-relative asset is missing' do
+      before { stub_request(:get, x2_url).to_return(status: 404) }
+
+      it 'still writes the HTML and skips the missing file' do
+        Dir.mktmpdir do |root|
+          html_dir = File.join root, 'html'
+          cache    = Arxiv::Downloader::AssetsCache.new root: root, client: client
+          described_class.new(identifier, client: client, assets_cache: cache).download to: html_dir
+
+          expect(File).to     exist File.join(html_dir, '2508.16190.html')
+          expect(File).to     exist File.join(html_dir, 'x1.png')
+          expect(File).not_to exist File.join(html_dir, 'x2.png')
+        end
+      end
+    end
+
+    context 'when a cached remote asset is missing' do
+      before { stub_request(:get, cdn_js).to_return(status: 404) }
+
+      it 'leaves the original URL in the HTML' do
+        Dir.mktmpdir do |root|
+          html_dir = File.join root, 'html'
+          cache    = Arxiv::Downloader::AssetsCache.new root: root, client: client
+          described_class.new(identifier, client: client, assets_cache: cache).download to: html_dir
+
+          rewritten = File.read File.join(html_dir, '2508.16190.html')
+          expect(rewritten).to include "src=\"#{cdn_js}\""
+        end
+      end
+    end
   end
 end

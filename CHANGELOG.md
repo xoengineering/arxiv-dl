@@ -8,6 +8,7 @@ Breaking: author affiliations. `Metadata#authors` is now a list of `Arxiv::Downl
 - BibTeX output is unchanged: names only.
 - Minimum Ruby version is now 4.0.7.
 - `Client#get` raises `Arxiv::Downloader::HTTPError` (with `status` and `url`) on non-success responses, instead of returning error bodies that were written to disk as PDFs/HTML or crashed the Atom parser.
+- Papers with no HTML version (404) skip the `html/` archive instead of saving arxiv's 404 page. A missing HTML asset (404) leaves its reference untouched instead of failing the paper.
 
 ## [0.1.1]
 

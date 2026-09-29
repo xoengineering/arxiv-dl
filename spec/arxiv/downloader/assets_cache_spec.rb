@@ -70,5 +70,16 @@ RSpec.describe Arxiv::Downloader::AssetsCache do
         expect(File.binread(path)).to eq binary_body
       end
     end
+
+    it 'raises HTTPError and creates no directories when the download fails' do
+      stub_request(:get, css_url).to_return(status: 404)
+
+      Dir.mktmpdir do |root|
+        cache = described_class.new(root: root, client: client)
+
+        expect { cache.fetch css_url }.to raise_error Arxiv::Downloader::HTTPError
+        expect(File).not_to exist File.join(root, '_shared')
+      end
+    end
   end
 end

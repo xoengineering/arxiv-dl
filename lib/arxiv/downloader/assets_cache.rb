@@ -15,8 +15,9 @@ module Arxiv
         path = local_path_for url
         return path if File.exist? path
 
+        body = @client.get(url).to_s
         FileUtils.mkdir_p File.dirname(path)
-        File.binwrite path, @client.get(url).to_s
+        File.binwrite path, body
 
         path
       end

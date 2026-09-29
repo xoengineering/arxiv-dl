@@ -18,9 +18,12 @@ module Arxiv
       end
 
       def download to:
+        html = page
+        return if html.nil?
+
         FileUtils.mkdir_p to
 
-        document = Nokogiri::HTML @client.get(html_url).to_s
+        document = Nokogiri::HTML html
         ASSET_SELECTORS.each do |selector, attribute|
           document.css(selector).each { |node| process node, attribute, to }
         end
@@ -29,6 +32,15 @@ module Arxiv
       end
 
       private
+
+      # nil when the paper has no HTML version (older papers, or conversion failed)
+      def page
+        @client.get(html_url).to_s
+      rescue HTTPError => e
+        raise unless e.status == 404
+
+        nil
+      end
 
       def html_url
         "https://arxiv.org/html/#{@identifier.id}"
@@ -43,6 +55,9 @@ module Arxiv
         when :remote        then cache_remote node, attribute, reference, html_dir
         when :root_relative then cache_remote node, attribute, "https://arxiv.org#{reference}", html_dir
         end
+      rescue HTTPError => e
+        # a missing asset leaves its reference untouched rather than failing the paper
+        raise unless e.status == 404
       end
 
       # :skip covers refs that can't or shouldn't be fetched: data:/javascript:/
