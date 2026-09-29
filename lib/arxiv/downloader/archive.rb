@@ -9,8 +9,9 @@ module Arxiv
         @client     = client
       end
 
-      # Downloads into v<N>.partial/ and renames it to v<N>/ only once everything
-      # succeeded, so an existing v<N>/ is always complete and is skipped.
+      # Downloads into v<N>.partial/ and
+      # renames it to v<N>/ only once everything succeeded.
+      # An existing v<N>/ is always complete and is skipped.
       def run
         return paper_dir if Dir.exist? paper_dir
 
