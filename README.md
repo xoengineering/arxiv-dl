@@ -138,4 +138,4 @@ MIT — see [LICENSE.md](LICENSE.md).
 
 ## Code of Conduct
 
-See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+This project follows the [Contributor Covenant](https://www.contributor-covenant.org/version/3/0/) 3.0 — see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
