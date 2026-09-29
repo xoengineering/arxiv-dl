@@ -22,10 +22,17 @@ module Arxiv
         response = HTTP.headers('User-Agent' => user_agent).follow.get(url)
         @last_request_at = Time.now
         log_request url, response
+        raise_unless_success url, response
         response
       end
 
       private
+
+      def raise_unless_success url, response
+        return if response.status.success?
+
+        raise HTTPError.new(status: response.status.code, url: url, reason: response.status.reason)
+      end
 
       def log_request url, response
         return if @log.nil?

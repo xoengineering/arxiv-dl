@@ -23,10 +23,9 @@ module Arxiv
       def fetch
         return nil if @client.nil?
 
-        response = @client.get url
-        return nil unless response.status.success?
-
-        response.to_s
+        @client.get(url).to_s
+      rescue HTTPError
+        nil
       end
 
       def to_s

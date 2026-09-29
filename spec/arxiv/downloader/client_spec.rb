@@ -44,6 +44,25 @@ RSpec.describe Arxiv::Downloader::Client do
       expect(WebMock).to have_requested(:get, url).with(headers: { 'User-Agent' => client.user_agent })
     end
 
+    context 'when arxiv responds with a non-success status' do
+      before { stub_request(:get, url).to_return(status: 429, body: 'Rate exceeded.') }
+
+      it 'raises HTTPError with the status and URL' do
+        expect { client.get url }.to raise_error(Arxiv::Downloader::HTTPError) { |error|
+          expect(error.status).to  eq 429
+          expect(error.url).to     eq url
+          expect(error.message).to eq "GET #{url} failed: 429 Too Many Requests"
+        }
+      end
+
+      it 'still logs the request' do
+        log = StringIO.new
+
+        expect { described_class.new(rate_limit: 0, log: log).get url }.to raise_error Arxiv::Downloader::HTTPError
+        expect(log.string).to include "==> GET #{url}"
+      end
+    end
+
     context 'with rate-limiting enabled' do
       let(:client) { described_class.new(rate_limit: 3) }
 

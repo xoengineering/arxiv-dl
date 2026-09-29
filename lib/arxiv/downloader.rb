@@ -6,9 +6,10 @@ require_relative 'downloader/bibtex'
 require_relative 'downloader/categories'
 require_relative 'downloader/cli'
 require_relative 'downloader/client'
-require_relative 'downloader/error'             # before identifier: Identifier::Invalid < Error
+require_relative 'downloader/error'             # before http_error and identifier: they subclass Error
 require_relative 'downloader/feed_parser'
 require_relative 'downloader/html_archive'
+require_relative 'downloader/http_error'        # after error
 require_relative 'downloader/identifier'        # after error
 require_relative 'downloader/metadata'          # before metadata/*: they reopen class Metadata
 require_relative 'downloader/metadata/bibtex'   # after metadata

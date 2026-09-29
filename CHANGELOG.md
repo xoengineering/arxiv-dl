@@ -7,6 +7,7 @@ Breaking: author affiliations. `Metadata#authors` is now a list of `Arxiv::Downl
 - The `metadata.md` body lists affiliations after each author name: `- Jon S. Lawrence (Australian Astronomical Observatory; Macquarie University)`.
 - BibTeX output is unchanged: names only.
 - Minimum Ruby version is now 4.0.7.
+- `Client#get` raises `Arxiv::Downloader::HTTPError` (with `status` and `url`) on non-success responses, instead of returning error bodies that were written to disk as PDFs/HTML or crashed the Atom parser.
 
 ## [0.1.1]
 
