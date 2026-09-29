@@ -10,6 +10,7 @@ RSpec.describe Arxiv::Downloader::Slug do
       Sequential Visual Storytelling and Comic Book Scene Segmentation
       in Multimodal Datasets
     TITLE
+
     slug = described_class.new(title).to_s
 
     expect(slug.length).to be <= 80
