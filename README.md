@@ -100,18 +100,21 @@ $ARXIV_DOWNLOAD_PATH/                   # default: $HOME/Downloads/ArXiv_Papers
     arxiv.org/static/...
     cdn.jsdelivr.net/...
   YYYY/MM/DD/<primary_category>/<arxiv-id>-<slug>/
-    <arxiv-id>.pdf
-    <arxiv-id>-abstract.html
-    metadata.md                         # YAML frontmatter + Markdown body
-    metadata.yaml
-    metadata.json
-    metadata.bib                        # upstream BibTeX, falls back to synthesized
-    html/
-      <arxiv-id>.html                   # path-rewritten to local assets
-      x1.png, x2.png, ...               # paper-specific images
-    src/
-      *.tex, *.bbl, ...                 # extracted from /src/<id> tarball
+    v<N>/                               # one folder per archived version
+      <arxiv-id>v<N>.pdf
+      <arxiv-id>v<N>-abstract.html
+      metadata.md                       # YAML frontmatter + Markdown body
+      metadata.yaml
+      metadata.json
+      metadata.bib                      # upstream BibTeX, falls back to synthesized
+      html/                             # absent when the paper has no HTML version
+        <arxiv-id>v<N>.html             # path-rewritten to local assets
+        x1.png, x2.png, ...             # paper-specific images
+      src/                              # absent for PDF-only submissions
+        *.tex, *.bbl, ...               # extracted from /src/<id>v<N>
 ```
+
+An unversioned ID (`2508.16190`) archives the latest version; a versioned ID (`2508.16190v1`) archives that version. Different versions of the same paper sit side by side under the same paper folder.
 
 `YYYY/MM/DD` is the original submission date. `<primary_category>` is from the paper's metadata (`cs.CL`, `math.NT`, etc). `<slug>` is derived from the paper title (Unicode → ASCII, hyphenated, truncated to 80 chars at a word boundary).
 
@@ -125,7 +128,7 @@ require 'arxiv/downloader'
 identifier = Arxiv::Downloader::Identifier.new '2508.16190'
 client     = Arxiv::Downloader::Client.new                # 3-second rate limit by default
 path       = Arxiv::Downloader::Archive.new(identifier, root: '/tmp/papers', client: client).run
-# => "/tmp/papers/2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis"
+# => "/tmp/papers/2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis/v1"
 ```
 
 ## Development

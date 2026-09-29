@@ -27,30 +27,36 @@ module Arxiv
         @metadata ||= FeedParser.new(@client.get(atom_url).to_s).metadata
       end
 
+      # the requested version, or the latest when none was requested
       def atom_url
-        "https://export.arxiv.org/api/query?id_list=#{@identifier.id}"
+        "https://export.arxiv.org/api/query?id_list=#{@identifier}"
+      end
+
+      # the version the API actually returned, so every download matches the metadata
+      def archived
+        @archived ||= Identifier.new "#{metadata.arxiv_id}v#{metadata.version}"
       end
 
       def paper_dir
-        @paper_dir ||= File.join @root, Path.new(metadata).to_s
+        @paper_dir ||= File.join @root, Path.new(metadata).to_s, "v#{metadata.version}"
       end
 
       def download_pdf
-        PDF.new(@identifier, client: @client).download to: File.join(paper_dir, "#{@identifier.id}.pdf")
+        PDF.new(archived, client: @client).download to: File.join(paper_dir, "#{archived}.pdf")
       end
 
       def download_abstract
-        AbstractPage.new(@identifier, client: @client)
-                    .download to: File.join(paper_dir, "#{@identifier.id}-abstract.html")
+        AbstractPage.new(archived, client: @client)
+                    .download to: File.join(paper_dir, "#{archived}-abstract.html")
       end
 
       def download_html_archive
-        HTMLArchive.new(@identifier, client: @client, assets_cache: assets_cache)
+        HTMLArchive.new(archived, client: @client, assets_cache: assets_cache)
                    .download to: File.join(paper_dir, 'html')
       end
 
       def download_source_archive
-        SourceArchive.new(@identifier, client: @client).download to: File.join(paper_dir, 'src')
+        SourceArchive.new(archived, client: @client).download to: File.join(paper_dir, 'src')
       end
 
       def assets_cache

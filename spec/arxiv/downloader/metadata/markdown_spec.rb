@@ -11,7 +11,7 @@ RSpec.describe Arxiv::Downloader::Metadata::Markdown do
       authors:          [
         Arxiv::Downloader::Author.new(name: 'Sandro Paval'),
         Arxiv::Downloader::Author.new(name: 'Ivan P. Yamshchikov', affiliations: ['Example University']),
-        Arxiv::Downloader::Author.new(name: 'Pascal Meißner', affiliations: ['Example Institute', 'Example Lab'])
+        Arxiv::Downloader::Author.new(name: 'Pascal Meißner',      affiliations: ['Example Institute', 'Example Lab'])
       ],
       abstract:         "Two lines\nof abstract.",
       published:        Date.new(2025, 8, 22),

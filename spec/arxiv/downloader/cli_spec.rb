@@ -2,17 +2,17 @@ require 'tmpdir'
 
 RSpec.describe Arxiv::Downloader::CLI do
   let(:stdout) { StringIO.new }
-  let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis' }
+  let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis/v1' }
   let(:stderr) { StringIO.new }
 
   let(:atom_url)     { 'https://export.arxiv.org/api/query?id_list=2508.16190' }
-  let(:pdf_url)      { 'https://arxiv.org/pdf/2508.16190.pdf' }
-  let(:abstract_url) { 'https://arxiv.org/abs/2508.16190' }
-  let(:html_url)     { 'https://arxiv.org/html/2508.16190' }
-  let(:src_url)      { 'https://arxiv.org/src/2508.16190' }
+  let(:pdf_url)      { 'https://arxiv.org/pdf/2508.16190v1.pdf' }
+  let(:abstract_url) { 'https://arxiv.org/abs/2508.16190v1' }
+  let(:html_url)     { 'https://arxiv.org/html/2508.16190v1' }
+  let(:src_url)      { 'https://arxiv.org/src/2508.16190v1' }
   let(:bibtex_url)   { 'https://arxiv.org/bibtex/2508.16190' }
-  let(:x1_url)       { 'https://arxiv.org/html/2508.16190/x1.png' }
-  let(:x2_url)       { 'https://arxiv.org/html/2508.16190/x2.png' }
+  let(:x1_url)       { 'https://arxiv.org/html/2508.16190v1/x1.png' }
+  let(:x2_url)       { 'https://arxiv.org/html/2508.16190v1/x2.png' }
   let(:css_url)      { 'https://arxiv.org/static/browse/0.3.4/css/ar5iv.0.7.9.min.css' }
   let(:js_url)       { 'https://arxiv.org/static/browse/0.3.4/js/addons_new.js' }
   let(:cdn_css_url)  { 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' }
@@ -63,7 +63,7 @@ RSpec.describe Arxiv::Downloader::CLI do
         Dir.mktmpdir do |root|
           described_class.new(['-p', root, '--rate-limit', '0', '2508.16190'], stdout: stdout, stderr: stderr).run
 
-          expect(File).to exist File.join(root, expected_dir, '2508.16190.pdf')
+          expect(File).to exist File.join(root, expected_dir, '2508.16190v1.pdf')
           expect(File).to exist File.join(root, expected_dir, 'metadata.md')
         end
       end
@@ -197,7 +197,7 @@ RSpec.describe Arxiv::Downloader::CLI do
             described_class.new(['2508.16190'], stdout: stdout, stderr: stderr).run
           end
 
-          expect(File).to exist File.join(root, expected_dir, '2508.16190.pdf')
+          expect(File).to exist File.join(root, expected_dir, '2508.16190v1.pdf')
         end
       end
     end
@@ -210,8 +210,8 @@ RSpec.describe Arxiv::Downloader::CLI do
               described_class.new(['-p', flag_root, '2508.16190'], stdout: stdout, stderr: stderr).run
             end
 
-            expect(File).to     exist File.join(flag_root, expected_dir, '2508.16190.pdf')
-            expect(File).not_to exist File.join(env_root, expected_dir, '2508.16190.pdf')
+            expect(File).to     exist File.join(flag_root, expected_dir, '2508.16190v1.pdf')
+            expect(File).not_to exist File.join(env_root, expected_dir, '2508.16190v1.pdf')
           end
         end
       end

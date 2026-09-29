@@ -2,17 +2,17 @@ require 'tmpdir'
 
 RSpec.describe Arxiv::Downloader::Archive do
   let(:identifier) { Arxiv::Downloader::Identifier.new '2508.16190' }
-  let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis' }
+  let(:expected_dir) { '2025/08/22/cs.CL/2508.16190-comicscene154-a-scene-dataset-for-comic-analysis/v1' }
   let(:client) { Arxiv::Downloader::Client.new(rate_limit: 0) }
 
   let(:atom_url)     { 'https://export.arxiv.org/api/query?id_list=2508.16190' }
-  let(:pdf_url)      { 'https://arxiv.org/pdf/2508.16190.pdf' }
-  let(:abstract_url) { 'https://arxiv.org/abs/2508.16190' }
-  let(:html_url)     { 'https://arxiv.org/html/2508.16190' }
-  let(:src_url)      { 'https://arxiv.org/src/2508.16190' }
+  let(:pdf_url)      { 'https://arxiv.org/pdf/2508.16190v1.pdf' }
+  let(:abstract_url) { 'https://arxiv.org/abs/2508.16190v1' }
+  let(:html_url)     { 'https://arxiv.org/html/2508.16190v1' }
+  let(:src_url)      { 'https://arxiv.org/src/2508.16190v1' }
   let(:bibtex_url)   { 'https://arxiv.org/bibtex/2508.16190' }
-  let(:x1_url)       { 'https://arxiv.org/html/2508.16190/x1.png' }
-  let(:x2_url)       { 'https://arxiv.org/html/2508.16190/x2.png' }
+  let(:x1_url)       { 'https://arxiv.org/html/2508.16190v1/x1.png' }
+  let(:x2_url)       { 'https://arxiv.org/html/2508.16190v1/x2.png' }
   let(:css_url)      { 'https://arxiv.org/static/browse/0.3.4/css/ar5iv.0.7.9.min.css' }
   let(:js_url)       { 'https://arxiv.org/static/browse/0.3.4/js/addons_new.js' }
   let(:cdn_css_url)  { 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' }
@@ -42,7 +42,7 @@ RSpec.describe Arxiv::Downloader::Archive do
       end
     end
 
-    it 'creates the YYYY/MM/DD/<cat>/<id>-<slug>/ directory' do
+    it 'creates the YYYY/MM/DD/<cat>/<id>-<slug>/v<N>/ directory for the latest version' do
       Dir.mktmpdir do |root|
         described_class.new(identifier, root: root, client: client).run
 
@@ -54,7 +54,7 @@ RSpec.describe Arxiv::Downloader::Archive do
       Dir.mktmpdir do |root|
         described_class.new(identifier, root: root, client: client).run
 
-        pdf = File.join root, expected_dir, '2508.16190.pdf'
+        pdf = File.join root, expected_dir, '2508.16190v1.pdf'
         expect(File.binread(pdf)).to eq File.binread('spec/fixtures/http/pdf-2508.16190.pdf')
       end
     end
@@ -63,7 +63,7 @@ RSpec.describe Arxiv::Downloader::Archive do
       Dir.mktmpdir do |root|
         described_class.new(identifier, root: root, client: client).run
 
-        abstract = File.join root, expected_dir, '2508.16190-abstract.html'
+        abstract = File.join root, expected_dir, '2508.16190v1-abstract.html'
         expect(File.read(abstract)).to eq File.read('spec/fixtures/http/abstract-2508.16190.html')
       end
     end
@@ -95,7 +95,7 @@ RSpec.describe Arxiv::Downloader::Archive do
         described_class.new(identifier, root: root, client: client).run
 
         html_dir = File.join root, expected_dir, 'html'
-        expect(File).to exist File.join(html_dir, '2508.16190.html')
+        expect(File).to exist File.join(html_dir, '2508.16190v1.html')
         expect(File).to exist File.join(html_dir, 'x1.png')
         expect(File).to exist File.join(html_dir, 'x2.png')
       end
@@ -109,6 +109,20 @@ RSpec.describe Arxiv::Downloader::Archive do
                                         'ar5iv.0.7.9.min.css')
         expect(File).to exist File.join(root, '_shared', 'cdn.jsdelivr.net', 'npm', 'bootstrap@5.3.0', 'dist', 'css',
                                         'bootstrap.min.css')
+      end
+    end
+
+    context 'with a versioned identifier' do
+      let(:identifier) { Arxiv::Downloader::Identifier.new '2508.16190v1' }
+      let(:atom_url)   { 'https://export.arxiv.org/api/query?id_list=2508.16190v1' }
+
+      it 'asks the API for that version and archives it under v<N>/' do
+        Dir.mktmpdir do |root|
+          path = described_class.new(identifier, root: root, client: client).run
+
+          expect(WebMock).to have_requested :get, atom_url
+          expect(path).to eq File.join(root, expected_dir)
+        end
       end
     end
   end
