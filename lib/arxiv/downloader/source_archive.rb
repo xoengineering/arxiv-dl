@@ -25,7 +25,7 @@ module Arxiv
         return extract_gzip body, to if body.start_with? GZIP_MAGIC
 
         # unrecognized format: keep the raw bytes rather than lose them
-        File.binwrite File.join(to, @identifier.id), body
+        File.binwrite File.join(to, @identifier.to_s), body
       end
 
       private
@@ -36,13 +36,13 @@ module Arxiv
           contents = gz.read
           next extract_tar contents, to if tar? contents
 
-          filename = File.basename(gz.orig_name || @identifier.id)
+          filename = File.basename(gz.orig_name || @identifier.to_s)
           File.binwrite File.join(to, filename), contents
         end
       end
 
       def url
-        "https://arxiv.org/src/#{@identifier.id}"
+        "https://arxiv.org/src/#{@identifier}"
       end
 
       def tar? contents

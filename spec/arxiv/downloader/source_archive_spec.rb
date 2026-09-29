@@ -64,6 +64,19 @@ RSpec.describe Arxiv::Downloader::SourceArchive do
       end
     end
 
+    context 'with a versioned identifier' do
+      let(:identifier) { Arxiv::Downloader::Identifier.new '2508.16190v1' }
+      let(:url)        { 'https://arxiv.org/src/2508.16190v1' }
+
+      it 'requests that version' do
+        Dir.mktmpdir do |dir|
+          described_class.new(identifier, client: client).download to: File.join(dir, 'src')
+
+          expect(WebMock).to have_requested :get, url
+        end
+      end
+    end
+
     context 'when the tarball has entries that escape the target directory' do
       let(:fixture) { File.binread 'spec/fixtures/http/src-path-traversal.tar.gz' }
 

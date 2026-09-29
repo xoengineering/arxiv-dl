@@ -13,7 +13,7 @@ module Arxiv
       private
 
       def url
-        "https://arxiv.org/abs/#{@identifier.id}"
+        "https://arxiv.org/abs/#{@identifier}"
       end
     end
   end

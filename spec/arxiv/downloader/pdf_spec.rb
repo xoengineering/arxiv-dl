@@ -26,5 +26,18 @@ RSpec.describe Arxiv::Downloader::PDF do
         expect(WebMock).to have_requested(:get, url)
       end
     end
+
+    context 'with a versioned identifier' do
+      let(:identifier) { Arxiv::Downloader::Identifier.new '2508.16190v1' }
+      let(:url)        { 'https://arxiv.org/pdf/2508.16190v1.pdf' }
+
+      it 'requests that version' do
+        Dir.mktmpdir do |dir|
+          described_class.new(identifier, client: client).download to: File.join(dir, '2508.16190v1.pdf')
+
+          expect(WebMock).to have_requested(:get, url)
+        end
+      end
+    end
   end
 end

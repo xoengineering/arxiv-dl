@@ -49,18 +49,21 @@ RSpec.describe Arxiv::Downloader::Metadata::Markdown do
 
         body, frontmatter = parsed File.join(dir, 'metadata.md')
         expect(frontmatter.keys).to include(
+          'abstract',
           'arxiv_id',
-          'version',
           'arxiv_url',
-          'pdf_url',
-          'title',
           'authors',
-          'published',
-          'updated',
-          'primary_category',
+          'bibtex_key',
           'categories',
           'comment',
-          'doi', 'journal_ref', 'bibtex_key', 'abstract'
+          'doi',
+          'journal_ref',
+          'pdf_url',
+          'primary_category',
+          'published',
+          'title',
+          'updated',
+          'version'
         )
         expect(frontmatter['bibtex_key']).to eq 'paval2025comicscene154'
         expect(body).to include '# ComicScene154: A Scene Dataset for Comic Analysis'

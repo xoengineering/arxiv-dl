@@ -130,6 +130,24 @@ RSpec.describe Arxiv::Downloader::HTMLArchive do
       end
     end
 
+    context 'with a versioned identifier' do
+      let(:identifier) { Arxiv::Downloader::Identifier.new '2508.16190v1' }
+      let(:html_url)   { 'https://arxiv.org/html/2508.16190v1' }
+      let(:x1_url)     { 'https://arxiv.org/html/2508.16190v1/x1.png' }
+      let(:x2_url)     { 'https://arxiv.org/html/2508.16190v1/x2.png' }
+
+      it 'fetches that version and its assets, and names the file after it' do
+        Dir.mktmpdir do |root|
+          html_dir = File.join root, 'html'
+          cache    = Arxiv::Downloader::AssetsCache.new root: root, client: client
+          described_class.new(identifier, client: client, assets_cache: cache).download to: html_dir
+
+          expect(File).to exist File.join(html_dir, '2508.16190v1.html')
+          expect(WebMock).to have_requested :get, x1_url
+        end
+      end
+    end
+
     context 'when the paper has no HTML version' do
       before { stub_request(:get, html_url).to_return(status: 404) }
 

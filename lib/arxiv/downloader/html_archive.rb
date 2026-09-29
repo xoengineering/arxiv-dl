@@ -28,7 +28,7 @@ module Arxiv
           document.css(selector).each { |node| process node, attribute, to }
         end
 
-        File.write File.join(to, "#{@identifier.id}.html"), document.to_html
+        File.write File.join(to, "#{@identifier}.html"), document.to_html
       end
 
       private
@@ -43,7 +43,7 @@ module Arxiv
       end
 
       def html_url
-        "https://arxiv.org/html/#{@identifier.id}"
+        "https://arxiv.org/html/#{@identifier}"
       end
 
       def process node, attribute, html_dir
@@ -79,7 +79,7 @@ module Arxiv
       end
 
       def absolute_for reference
-        "https://arxiv.org/html/#{@identifier.id}/#{reference}"
+        "https://arxiv.org/html/#{@identifier}/#{reference}"
       end
 
       def cache_remote node, attribute, reference, html_dir
