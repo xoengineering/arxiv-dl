@@ -19,8 +19,8 @@ module Arxiv
         return error_with USAGE       if options[:targets].empty?
         return error_with conflict if options[:verbose] && options[:quiet]
 
-        download_each options
-        0
+        failures = download_each options
+        failures.zero? ? 0 : 1
       end
 
       private
@@ -72,13 +72,24 @@ module Arxiv
       def download_each options
         client = Client.new rate_limit: options[:rate_limit], log: (options[:verbose] ? @stdout : nil)
 
+        failures = 0
         options[:targets].each do |target|
-          identifier = Identifier.new target
-          @stdout.puts "==> Downloading #{identifier.id}" if options[:verbose]
-
-          path = Archive.new(identifier, root: options[:path], client: client).run
-          @stdout.puts path unless options[:quiet]
+          failures += 1 unless download_one(target, client:, options:)
         end
+        failures
+      end
+
+      # true on success; reports the failure and returns false otherwise
+      def download_one target, client:, options:
+        identifier = Identifier.new target
+        @stdout.puts "==> Downloading #{identifier.id}" if options[:verbose]
+
+        path = Archive.new(identifier, root: options[:path], client: client).run
+        @stdout.puts path unless options[:quiet]
+        true
+      rescue Error, HTTP::Error => e
+        @stderr.puts "#{target}: #{e.message}"
+        false
       end
     end
   end

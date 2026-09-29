@@ -138,6 +138,58 @@ RSpec.describe Arxiv::Downloader::CLI do
       end
     end
 
+    context 'when some targets fail' do
+      let(:missing_atom_url) { 'https://export.arxiv.org/api/query?id_list=1234.1234' }
+      let(:throttled_url)    { 'https://export.arxiv.org/api/query?id_list=1202.0819' }
+
+      before do
+        stub_request(:get, missing_atom_url)
+          .to_return(status: 200, body: File.read('spec/fixtures/http/empty-feed-1234.1234.xml'))
+        stub_request(:get, throttled_url).to_return(status: 429, body: 'Rate exceeded.')
+      end
+
+      def run_with targets, root
+        described_class.new(['-p', root, '--rate-limit', '0', *targets], stdout: stdout, stderr: stderr).run
+      end
+
+      it 'keeps downloading the remaining targets' do
+        Dir.mktmpdir do |root|
+          run_with ['not-an-id', '1234.1234', '1202.0819', '2508.16190'], root
+
+          expect(stdout.string).to eq "#{File.join(root, expected_dir)}\n"
+        end
+      end
+
+      it 'reports each failure on stderr, prefixed by its target' do
+        Dir.mktmpdir do |root|
+          run_with ['not-an-id', '1234.1234', '1202.0819', '2508.16190'], root
+
+          expect(stderr.string.lines).to eq [
+            "not-an-id: not a recognizable arXiv identifier: not-an-id\n",
+            "1234.1234: arxiv API returned no paper\n",
+            "1202.0819: GET #{throttled_url} failed: 429 Too Many Requests\n"
+          ]
+        end
+      end
+
+      it 'exits non-zero' do
+        Dir.mktmpdir do |root|
+          expect(run_with(['1234.1234', '2508.16190'], root)).to eq 1
+        end
+      end
+
+      it 'reports a network failure and continues' do
+        stub_request(:get, missing_atom_url).to_raise HTTP::ConnectionError.new('connection refused')
+
+        Dir.mktmpdir do |root|
+          run_with ['1234.1234', '2508.16190'], root
+
+          expect(stderr.string).to eq "1234.1234: connection refused\n"
+          expect(stdout.string).to eq "#{File.join(root, expected_dir)}\n"
+        end
+      end
+    end
+
     context 'with ENV ARXIV_DOWNLOAD_PATH' do
       it 'uses ENV when -p is not provided' do
         Dir.mktmpdir do |root|

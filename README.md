@@ -47,7 +47,7 @@ Accepted input forms:
 | `-p PATH`, `--path PATH` | Root download directory                                  |
 | `--rate-limit SECONDS`   | Seconds between HTTP requests; `0` disables throttling   |
 | `-v`, `--verbose`        | Print step lines and per-request URL/byte logs to stdout |
-| `-q`, `--quiet`          | Print nothing; success/failure conveyed via exit code    |
+| `-q`, `--quiet`          | Print nothing to stdout; errors still go to stderr       |
 | `--version`              | Print the gem version and exit                           |
 | `-h`, `--help`           | Print help and exit                                      |
 
@@ -61,6 +61,10 @@ Accepted input forms:
 | `ARXIV_RATE_LIMIT`    | Seconds between HTTP requests (default: `3`, per arxiv etiquette; `0` disables) |
 
 Precedence: CLI flag > ENV var > default.
+
+### Errors and exit status
+
+A target that fails (unrecognized ID, no such paper, HTTP error, network failure) is reported on stderr as `<target>: <message>`, and the remaining targets still download. Exit status is `0` when every target succeeds and `1` when any fails.
 
 ### Examples
 
