@@ -63,5 +63,44 @@ RSpec.describe Arxiv::Downloader::SourceArchive do
         expect(WebMock).to have_requested :get, url
       end
     end
+
+    context 'when the source is a single gzipped file' do
+      let(:fixture) { File.binread 'spec/fixtures/http/src-single-file.gz' }
+
+      it 'writes the decompressed file under its original gzip name' do
+        Dir.mktmpdir do |dir|
+          target = File.join dir, 'src'
+          described_class.new(identifier, client: client).download to: target
+
+          expect(File.read(File.join(target, 'main.tex'))).to include 'Single-file submission.'
+        end
+      end
+    end
+
+    context 'when the source is a PDF (PDF-only submission)' do
+      let(:fixture) { File.binread 'spec/fixtures/http/pdf-2508.16190.pdf' }
+
+      it 'writes nothing, since the PDF is already archived' do
+        Dir.mktmpdir do |dir|
+          target = File.join dir, 'src'
+          described_class.new(identifier, client: client).download to: target
+
+          expect(File).not_to exist target
+        end
+      end
+    end
+
+    context 'when the source is in an unrecognized format' do
+      let(:fixture) { 'plain bytes' }
+
+      it 'keeps the raw bytes as src/<id>' do
+        Dir.mktmpdir do |dir|
+          target = File.join dir, 'src'
+          described_class.new(identifier, client: client).download to: target
+
+          expect(File.binread(File.join(target, '2508.16190'))).to eq 'plain bytes'
+        end
+      end
+    end
   end
 end
