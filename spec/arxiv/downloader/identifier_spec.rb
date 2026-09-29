@@ -420,7 +420,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
           let(:input) { 'http://arxiv.org/pdf/pdf/math.GT/0312088.pdf' }
 
           it 'parses ID and version' do
-            expect(parsed_input.id).to      eq 'pdf/math.GT/0312088'
+            expect(parsed_input.id).to      eq 'math.GT/0312088'
             expect(parsed_input.version).to be_nil
           end
         end
@@ -429,7 +429,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
           let(:input) { 'http://arxiv.org/pdf/pdf/math.GT/0312088v3.pdf' }
 
           it 'parses ID and version' do
-            expect(parsed_input.id).to      eq 'pdf/math.GT/0312088'
+            expect(parsed_input.id).to      eq 'math.GT/0312088'
             expect(parsed_input.version).to eq 3
           end
         end
@@ -438,7 +438,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
           let(:input) { 'http://arxiv.org/pdf/pdf/math.GT/0312088' }
 
           it 'parses ID and version' do
-            expect(parsed_input.id).to      eq 'pdf/math.GT/0312088'
+            expect(parsed_input.id).to      eq 'math.GT/0312088'
             expect(parsed_input.version).to be_nil
           end
         end
@@ -447,7 +447,7 @@ RSpec.describe Arxiv::Downloader::Identifier do
           let(:input) { 'http://arxiv.org/pdf/pdf/math.GT/0312088v9' }
 
           it 'parses ID and version' do
-            expect(parsed_input.id).to      eq 'pdf/math.GT/0312088'
+            expect(parsed_input.id).to      eq 'math.GT/0312088'
             expect(parsed_input.version).to eq 9
           end
         end
@@ -672,6 +672,16 @@ RSpec.describe Arxiv::Downloader::Identifier do
         it 'raises Invalid error' do
           expect { described_class.new input }
             .to raise_error described_class::Invalid, "not a recognizable arXiv identifier URL: #{input}"
+        end
+      end
+
+      # Other sources' IDs have a dot and a slash too, but are not arXiv IDs
+      ['10.2307/4385670', '10.5281/zenodo.884117', 'hal-01207234.v2/x', 'foo.bar'].each do |input|
+        context "with #{input.inspect}, which is not in either arXiv ID format" do
+          it 'raises Invalid error' do
+            expect { described_class.new input }
+              .to raise_error described_class::Invalid, "not a recognizable arXiv identifier: #{input}"
+          end
         end
       end
     end

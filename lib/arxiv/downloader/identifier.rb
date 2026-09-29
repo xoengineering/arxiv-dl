@@ -3,6 +3,9 @@ module Arxiv
     class Identifier
       class Invalid < Error; end
 
+      NEW_STYLE = /\A\d{4}\.\d{4,5}\z/
+      LEGACY    = %r{\A[a-z]+(?:-[a-z]+)*(?:\.[A-Z]{2})?/\d{7}\z}
+
       attr_reader :id, :version, :input
 
       def initialize input
@@ -76,7 +79,16 @@ module Arxiv
 
       def set_id_and_version
         normalize_input
+        invalidate_unknown_format
         @id = @cleaned_input
+      end
+
+      # After normalizing, the ID must be new-style (2508.16190) or legacy (cs/0002001,
+      # math.GT/0312088). Other sources' IDs, like the DOI 10.2307/4385670, are not.
+      def invalidate_unknown_format
+        return if NEW_STYLE.match?(@cleaned_input) || LEGACY.match?(@cleaned_input)
+
+        raise Invalid, "not a recognizable arXiv identifier: #{input}"
       end
 
       # mutaters
@@ -117,6 +129,11 @@ module Arxiv
       def delete_format_namespaces!
         %w[/abs/ /html/ /pdf/].each do |format_namespace|
           @cleaned_input.sub! format_namespace, ''
+        end
+
+        # a doubled namespace, as in arxiv.org/pdf/pdf/math.GT/0312088, leaves one behind
+        %w[abs/ html/ pdf/].each do |format_namespace|
+          @cleaned_input.delete_prefix! format_namespace
         end
       end
 

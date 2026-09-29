@@ -1,5 +1,8 @@
 ## [0.3.2]
 
+- Fixed: `Identifier` accepted anything with a dot or a slash, such as the DOIs `10.2307/4385670` and `10.5281/zenodo.884117`, which then failed at download. It now requires a new-style (`2508.16190`) or legacy (`cs/0002001`, `math.GT/0312088`) arXiv ID and raises `Identifier::Invalid` otherwise.
+- Fixed: a doubled path segment, as in `arxiv.org/pdf/pdf/math.GT/0312088.pdf`, gave the ID `pdf/math.GT/0312088`. It now gives `math.GT/0312088`.
+
 - `PaperFolder` now comes from [dl-core](https://github.com/xoengineering/dl-core) 0.2. `Arxiv::Downloader::PaperFolder` subclasses it and keeps rewriting `html/` links when a flat version moves into `v<N>/`. No change in behavior or output.
 
 ## [0.3.1]
