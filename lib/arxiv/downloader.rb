@@ -16,6 +16,7 @@ require_relative 'downloader/metadata/bibtex'   # after metadata
 require_relative 'downloader/metadata/json'     # after metadata
 require_relative 'downloader/metadata/markdown' # after metadata
 require_relative 'downloader/metadata/yaml'     # after metadata
+require_relative 'downloader/paper_folder'
 require_relative 'downloader/paper_not_found'   # after error
 require_relative 'downloader/path'
 require_relative 'downloader/pdf'
